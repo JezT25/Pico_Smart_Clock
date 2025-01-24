@@ -16,13 +16,15 @@
 
 /** Pico Smart Clock Libraries **/
 #include "IDEVICE.h"
+
 #include "header/HARDWARE.h"
-#include "cpp/HARDWARE.cpp"
 #include "header/LED.h"
-#include "cpp/LED.cpp"
 #include "header/TIME.h"
-#include "cpp/TIME.cpp"
 #include "header/HWIO.h"
+
+#include "cpp/HARDWARE.cpp"
+#include "cpp/LED.cpp"
+#include "cpp/TIME.cpp"
 #include "cpp/HWIO.cpp"
 
 struct SystemComponents {

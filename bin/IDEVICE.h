@@ -7,14 +7,7 @@
 #ifndef IDEVICE_h
 #define IDEVICE_h
 
-#define MOUNT_COUNT 6
-
-#define CLOCK_MODE	0
-#define DATE_MODE 	1
-#define YEAR_MODE	2
-#define TEMP_MODE	3
-#define HUMI_MODE	4
-#define PRES_MODE	5
+#define MODE_COUNT 6
 
 class IDATA
 {
@@ -41,6 +34,16 @@ class IDATA
 class ISYSTEM
 {
     public:
+        enum MODES : uint8_t
+        {
+            CLOCK_MODE,
+            DATE_MODE,
+            YEAR_MODE,
+            TEMP_MODE,
+            HUMI_MODE,
+            PRES_MODE
+        };
+
         volatile uint8_t SYSTEM_MODE    =   CLOCK_MODE;
 };
 

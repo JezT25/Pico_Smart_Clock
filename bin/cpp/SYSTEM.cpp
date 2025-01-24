@@ -12,7 +12,7 @@ void SYSTEM_class::Initialize()
     _HARDWARE.Initialize();
 
     // Initialize External Hardware IO
-    _HWIO.Initialize(&_ISystem);
+    _HWIO.Initialize(&_IData, &_ISystem);
 
     // Initialize Clock Interrupts
     add_alarm_in_ms(ISR_START_ON_MS, DisplayISR, this, false);
@@ -21,9 +21,11 @@ void SYSTEM_class::Initialize()
 
 void SYSTEM_class::Run()
 {
-    _LED.updateBuffer(_IData);
+    _LED.updateBuffer(_IData, _ISystem);
+    _LED.toggleDot(_ISystem);
 }
 
+// Interrupt Routine [200Hz]
 long long int SYSTEM_class::DisplayISR(alarm_id_t id, void* user_data)
 {
     SYSTEM_class* system = static_cast<SYSTEM_class*>(user_data);
@@ -31,9 +33,11 @@ long long int SYSTEM_class::DisplayISR(alarm_id_t id, void* user_data)
     return DISPLAY_REFRESH_US;
 }
 
+// Interrupt Routine [2Hz]
 long long int SYSTEM_class::ClockISR(alarm_id_t id, void* user_data)
 {
     SYSTEM_class* system = static_cast<SYSTEM_class*>(user_data);
+    if (system->_ISystem.SYSTEM_MODE == system->_ISystem.CLOCK_MODE) system->_LED.toggleDot();
     system->_TIME.getTime(&system->_IData);
     return TIME_REFRESH_US;
 }

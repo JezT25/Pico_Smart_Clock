@@ -9,25 +9,32 @@
 
 #include "../setup.hpp"
 
-#define SEG_1           0
-#define SEG_2           1
-#define SEG_3           2
-#define SEG_4           3
-
 #define SEG_COUNT       4
 #define LED_CHAR_COUNT  14
 
+#define ON              0
+#define OFF             1
+
 class LED_class : private HARDWARE_class {
     private:
-        volatile uint8_t currentSegment                         = SEG_1;
-        volatile uint8_t segmentBuffer[MOUNT_COUNT][SEG_COUNT]  =
+        enum Segments : uint8_t 
         {
-            {  0, 0, 0, 0  },  // Clock Time
-            {  0, 0, 0, 0  },  // Date
-            {  2, 0, 0, 0  },  // Year
-            {  0, 0, 0, 12 },  // Temperature
-            {  0, 0, 0, 13 },  // Humidity
-            {  0, 0, 0, 13 }   // Pressure
+            SEG_1,
+            SEG_2,
+            SEG_3,
+            SEG_4
+        };
+
+        volatile bool dotState                                  = ON;
+        volatile uint8_t currentSegment                         = SEG_1;
+        volatile uint8_t segmentBuffer[MODE_COUNT][SEG_COUNT]   =
+        {
+            {  0, 0, 0, 0   },  // Clock Time
+            {  0, 0, 0, 0   },  // Date
+            {  2, 0, 0, 0   },  // Year
+            {  10, 0, 0, 12 },  // Temperature
+            {  0, 0, 0, 13  },  // Humidity
+            {  10, 0, 0, 13 }   // Pressure
         };
         const uint8_t LED_digitValues[LED_CHAR_COUNT]           =
         {
@@ -48,8 +55,10 @@ class LED_class : private HARDWARE_class {
         };
 
     public:
+        void toggleDot();
+        void toggleDot(ISYSTEM ISystem);
         void displayDigits(ISYSTEM ISystem);
-        void updateBuffer(IDATA IData);
+        void updateBuffer(IDATA IData, ISYSTEM ISystem);
 };
 
 #endif
