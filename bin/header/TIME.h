@@ -10,9 +10,10 @@
 #include "../setup.hpp"
 
 #define DS3231_ADDR     0x68
+
 #define DATA_REG        0x00
-#define HOUR_24_FORMAT  0x3F
 #define CENTURY_BIT     0x1F
+#define HOUR_24_FORMAT  0x3F
 
 class TIME_class : private HARDWARE_class {
     private:
@@ -24,7 +25,7 @@ class TIME_class : private HARDWARE_class {
         uint8_t month;
         uint8_t year;
         
-        uint8_t bcd_to_decimal(uint8_t bcd);
+        inline uint8_t bcd_to_decimal(uint8_t bcd);
 
     public:
         void getTime(IDATA *IData);

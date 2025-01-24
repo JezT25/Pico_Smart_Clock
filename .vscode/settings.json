@@ -42,6 +42,7 @@
         "cstdint": "cpp",
         "array": "cpp",
         "string": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "compare": "cpp"
     }
 }

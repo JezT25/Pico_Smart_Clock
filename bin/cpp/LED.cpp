@@ -18,6 +18,7 @@ void LED_class::toggleDot(ISYSTEM ISystem)
         case ISystem.CLOCK_MODE:
             break;
         case ISystem.YEAR_MODE:
+        case ISystem.PRES_MODE:
             dotState = OFF;
             break;
         default:
@@ -49,18 +50,53 @@ void LED_class::displayDigits(ISYSTEM ISystem)
 void LED_class::updateBuffer(IDATA IData, ISYSTEM ISystem)
 {
     // Get Time
-    segmentBuffer[ISystem.CLOCK_MODE][0] = IData.CLOCK_HOUR / 10;
-    segmentBuffer[ISystem.CLOCK_MODE][1] = IData.CLOCK_HOUR % 10;
-    segmentBuffer[ISystem.CLOCK_MODE][2] = IData.CLOCK_MINUTE / 10;
-    segmentBuffer[ISystem.CLOCK_MODE][3] = IData.CLOCK_MINUTE % 10;
+    segmentBuffer[ISystem.CLOCK_MODE][SEG_1] = getTens(IData.CLOCK_HOUR);
+    segmentBuffer[ISystem.CLOCK_MODE][SEG_2] = getOnes(IData.CLOCK_HOUR);
+    segmentBuffer[ISystem.CLOCK_MODE][SEG_3] = getTens(IData.CLOCK_MINUTE);
+    segmentBuffer[ISystem.CLOCK_MODE][SEG_4] = getOnes(IData.CLOCK_MINUTE);
 
     // Get Date
-    segmentBuffer[ISystem.DATE_MODE][0] = (IData.CLOCK_DAY / 10) ?: 10;
-    segmentBuffer[ISystem.DATE_MODE][1] = IData.CLOCK_DAY % 10;
-    segmentBuffer[ISystem.DATE_MODE][2] = (IData.CLOCK_MONTH / 10) ?: 10;
-    segmentBuffer[ISystem.DATE_MODE][3] = IData.CLOCK_MONTH % 10;
+    segmentBuffer[ISystem.DATE_MODE][SEG_1] = getTens(IData.CLOCK_DAY, EN_BLANK);
+    segmentBuffer[ISystem.DATE_MODE][SEG_2] = getOnes(IData.CLOCK_DAY);
+    segmentBuffer[ISystem.DATE_MODE][SEG_3] = getTens(IData.CLOCK_MONTH, EN_BLANK);
+    segmentBuffer[ISystem.DATE_MODE][SEG_4] = getOnes(IData.CLOCK_MONTH);
 
     // Get Year
-    segmentBuffer[ISystem.YEAR_MODE][2] = IData.CLOCK_YEAR / 10;
-    segmentBuffer[ISystem.YEAR_MODE][3] = IData.CLOCK_YEAR % 10;
+    segmentBuffer[ISystem.YEAR_MODE][SEG_3] = getTens(IData.CLOCK_YEAR);
+    segmentBuffer[ISystem.YEAR_MODE][SEG_4] = getOnes(IData.CLOCK_YEAR);
+
+    // Get Temperature
+    segmentBuffer[ISystem.TEMP_MODE][SEG_1] = (IData.SENSOR_TEMP < 0) ? DASH : getTens(IData.SENSOR_TEMP, EN_BLANK);
+    segmentBuffer[ISystem.TEMP_MODE][SEG_2] = getOnes(IData.SENSOR_TEMP);
+    segmentBuffer[ISystem.TEMP_MODE][SEG_3] = getDecimal(IData.SENSOR_TEMP);
+
+    // Get Humidity
+    segmentBuffer[ISystem.HUMI_MODE][SEG_1] = getTens(IData.SENSOR_HUMIDITY, EN_BLANK);
+    segmentBuffer[ISystem.HUMI_MODE][SEG_2] = getOnes(IData.SENSOR_HUMIDITY);
+    segmentBuffer[ISystem.HUMI_MODE][SEG_3] = getDecimal(IData.SENSOR_HUMIDITY);
+
+    // Get Pressure
+    segmentBuffer[ISystem.PRES_MODE][SEG_1] = getHundred(IData.SENSOR_PRESSURE, EN_BLANK);
+    segmentBuffer[ISystem.PRES_MODE][SEG_2] = getTens(IData.SENSOR_PRESSURE);
+    segmentBuffer[ISystem.PRES_MODE][SEG_3] = getOnes(IData.SENSOR_PRESSURE);
+}
+
+inline uint8_t LED_class::getDecimal(double number)
+{   
+    return ((number < 0 ? -number : number) - (int)number) * 10;
+}
+
+inline uint8_t LED_class::getOnes(uint8_t number)
+{
+    return (number < 0 ? -number : number) % 10;
+}
+
+inline uint8_t LED_class::getTens(uint8_t number, bool blank)
+{
+    return (number > 99 ? (number / 10) % 10 : number / 10) ?: (!blank ? ZERO : DIGIT_OFF);
+}
+
+inline uint8_t LED_class::getHundred(uint8_t number, bool blank)
+{
+    return (number / 100) ?: (!blank ? ZERO : DIGIT_OFF);
 }

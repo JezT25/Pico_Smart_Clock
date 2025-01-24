@@ -24,11 +24,11 @@ class IDATA
         
         volatile int CLOCK_YEAR         =   0;
 
-        volatile float SENSOR_TEMP      =   0;
+        volatile double SENSOR_TEMP     =   0;
         
-        volatile float SENSOR_HUMIDITY  =   0;
+        volatile double SENSOR_HUMIDITY =   0;
 
-        volatile float SENSOR_PRESSURE  =   0;
+        volatile double SENSOR_PRESSURE =   0;
 };
 
 class ISYSTEM

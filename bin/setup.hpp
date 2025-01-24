@@ -9,6 +9,7 @@
 
 /** Standard Pico Libraries **/
 #include <stdio.h>
+#include <cstring>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "hardware/timer.h"
@@ -19,11 +20,13 @@
 
 #include "header/HARDWARE.h"
 #include "header/LED.h"
+#include "header/SENSOR.h"
 #include "header/TIME.h"
 #include "header/HWIO.h"
 
 #include "cpp/HARDWARE.cpp"
 #include "cpp/LED.cpp"
+#include "cpp/SENSOR.cpp"
 #include "cpp/TIME.cpp"
 #include "cpp/HWIO.cpp"
 
@@ -35,6 +38,7 @@ struct SystemComponents {
     // Hardware Classes
     HARDWARE_class _HARDWARE;
     LED_class      _LED;
+    SENSOR_class   _SENSOR;
     TIME_class     _TIME;
     HWIO_class     _HWIO;
 };

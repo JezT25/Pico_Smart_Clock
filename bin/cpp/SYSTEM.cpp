@@ -11,6 +11,9 @@ void SYSTEM_class::Initialize()
     // Initialize Pico Hardware
     _HARDWARE.Initialize();
 
+    // Initialize BME280 Sensor
+    _SENSOR.Initialize();
+
     // Initialize External Hardware IO
     _HWIO.Initialize(&_IData, &_ISystem);
 
@@ -39,5 +42,6 @@ long long int SYSTEM_class::ClockISR(alarm_id_t id, void* user_data)
     SYSTEM_class* system = static_cast<SYSTEM_class*>(user_data);
     if (system->_ISystem.SYSTEM_MODE == system->_ISystem.CLOCK_MODE) system->_LED.toggleDot();
     system->_TIME.getTime(&system->_IData);
+    system->_SENSOR.getSensorData(&system->_IData);
     return TIME_REFRESH_US;
 }

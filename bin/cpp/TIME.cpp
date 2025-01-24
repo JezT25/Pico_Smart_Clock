@@ -6,7 +6,7 @@
 
 #include "../setup.hpp"
 
-uint8_t TIME_class::bcd_to_decimal(uint8_t bcd) {
+inline uint8_t TIME_class::bcd_to_decimal(uint8_t bcd) {
     return (bcd >> 4) * 10 + (bcd & 0x0F);
 }
 
