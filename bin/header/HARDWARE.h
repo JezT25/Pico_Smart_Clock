@@ -26,25 +26,27 @@
 #define SEG_CTRL_3          18
 #define SEG_CTRL_4          19
 
-#define BUTTON_MODE         21
-#define BUTTON_UP           21
-#define BUTTON_DOWN         21
+#define BUTTON_MODE         20
+#define BUTTON_SELECT       21
+
+#define BUZZER              7
 
 #define LED_PARTITION_COUNT 4
 #define LED_SEGMENT_COUNT   7
-#define BUTTON_COUNT        1   // Set to 1 since I only have 1 installed for now
+#define BUTTON_COUNT        2
 
 class HARDWARE_class {
     protected:
-        const uint8_t LED_Dot           =   SEG_DOT;
-        const uint8_t LED_Section[4]    = { SEG_CTRL_1, SEG_CTRL_2, SEG_CTRL_3, SEG_CTRL_4 };
-        const uint8_t LED_Segment7[7]   = { SEG_A, SEG_B, SEG_C, SEG_D, SEG_E, SEG_F, SEG_G };
-        const uint8_t Buttons[3]        = { BUTTON_MODE, BUTTON_UP, BUTTON_DOWN };
+        const uint8_t LED_Dot                           =   SEG_DOT;
+        const uint8_t LED_Section[LED_PARTITION_COUNT]  = { SEG_CTRL_1, SEG_CTRL_2, SEG_CTRL_3, SEG_CTRL_4 };
+        const uint8_t LED_Segment7[LED_SEGMENT_COUNT]   = { SEG_A, SEG_B, SEG_C, SEG_D, SEG_E, SEG_F, SEG_G };
+        const uint8_t Buttons[BUTTON_COUNT]             = { BUTTON_MODE, BUTTON_SELECT };
 
     private:
         void I2C_Initialize();
         void LED_Initialize();
         void BUTTON_Initialize();
+        void BUZZER_Initialize();
 
     public:
         void Initialize();

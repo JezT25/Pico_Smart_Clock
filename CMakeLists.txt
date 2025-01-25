@@ -56,6 +56,7 @@ target_include_directories(Pico_SmartClock PRIVATE
 # Add any user requested libraries
 target_link_libraries(Pico_SmartClock 
         hardware_i2c
+        hardware_pwm
         )
 
 pico_add_extra_outputs(Pico_SmartClock)

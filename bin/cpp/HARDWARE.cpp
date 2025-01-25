@@ -50,10 +50,16 @@ void HARDWARE_class::BUTTON_Initialize()
     }
 }
 
+void HARDWARE_class::BUZZER_Initialize()
+{
+    gpio_set_function(BUZZER, GPIO_FUNC_PWM);
+}
+
 void HARDWARE_class::Initialize()
 {
     I2C_Initialize();
     LED_Initialize();
     BUTTON_Initialize();
+    BUZZER_Initialize();
 }
 

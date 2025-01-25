@@ -14,6 +14,7 @@
 #include "hardware/i2c.h"
 #include "hardware/timer.h"
 #include "hardware/gpio.h"
+#include "hardware/pwm.h"
 
 /** Pico Smart Clock Libraries **/
 #include "IDEVICE.h"

@@ -26,6 +26,7 @@ void SYSTEM_class::Run()
 {
     _LED.updateBuffer(_IData, _ISystem);
     _LED.toggleDot(_ISystem);
+    _HWIO.stopBuzzer();
 }
 
 // Interrupt Routine [200Hz]
