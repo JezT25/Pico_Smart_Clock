@@ -22,7 +22,7 @@ class IDATA
 
         volatile uint8_t CLOCK_MONTH    =   0;
         
-        volatile int CLOCK_YEAR         =   0;
+        volatile uint8_t CLOCK_YEAR     =   0;
 
         volatile double SENSOR_TEMP     =   0;
         

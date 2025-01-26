@@ -6,14 +6,14 @@
 
 #include "../setup.hpp"
 
-IDATA* HWIO_class::_IData				= nullptr;
-ISYSTEM* HWIO_class::_ISystem 			= nullptr;
-int HWIO_class::buzzer_duration			= BEEP_SHORT;
-bool HWIO_class::modeButton_ispressed 	= false;
-bool HWIO_class::selectButton_ispressed = false;
-uint32_t HWIO_class::modeButton_lpt		= 0;
-uint32_t HWIO_class::selectButton_lpt	= 0;
-uint32_t HWIO_class::buzzer_lpt 		= 0;
+volatile IDATA* HWIO_class::_IData					= nullptr;
+volatile ISYSTEM* HWIO_class::_ISystem 				= nullptr;
+volatile int HWIO_class::buzzer_duration			= BEEP_SHORT;
+volatile bool HWIO_class::modeButton_ispressed 		= false;
+volatile bool HWIO_class::selectButton_ispressed	= false;
+volatile uint32_t HWIO_class::modeButton_lpt		= 0;
+volatile uint32_t HWIO_class::selectButton_lpt		= 0;
+volatile uint32_t HWIO_class::buzzer_lpt 			= 0;
 
 
 void HWIO_class::Initialize(IDATA *IData, ISYSTEM *ISystem)

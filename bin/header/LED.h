@@ -25,7 +25,7 @@ class LED_class : private HARDWARE_class {
             SEG_3,
             SEG_4
         };
-        enum LEDDigit : uint8_t {
+        enum LED_Digit : uint8_t {
             ZERO,           // 0
             ONE,            // 1
             TWO,            // 2

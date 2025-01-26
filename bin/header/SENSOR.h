@@ -31,7 +31,7 @@
 #define REG_CTRL_H  0xF2
 #define REG_DATA    0xF7
 
-class SENSOR_class : private HARDWARE_class {
+class SENSOR_class {
     private:
         struct
         {
@@ -42,9 +42,9 @@ class SENSOR_class : private HARDWARE_class {
             int32_t     t_fine; 
         } _bme_comp_coeffs;
 
-        uint32_t raw_temperature;
-        uint32_t raw_pressure;
-        uint32_t raw_humidity;
+        volatile uint32_t raw_temperature;
+        volatile uint32_t raw_pressure;
+        volatile uint32_t raw_humidity;
 
         inline int8_t uint8_t_to_int8_t (uint8_t in);
         inline int16_t uint16_t_to_int16_t(uint16_t in);

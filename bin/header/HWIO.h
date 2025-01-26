@@ -23,22 +23,22 @@
 
 class HWIO_class : private HARDWARE_class {
     private:
-		static IDATA *_IData;
-		static ISYSTEM *_ISystem;
-		static int buzzer_duration;
-		static bool modeButton_ispressed;
-		static bool selectButton_ispressed;
-		static uint32_t buzzer_lpt;
-		static uint32_t modeButton_lpt;
-		static uint32_t selectButton_lpt;
+		static volatile IDATA *_IData;
+		static volatile ISYSTEM *_ISystem;
+		static volatile int buzzer_duration;
+		static volatile bool modeButton_ispressed;
+		static volatile bool selectButton_ispressed;
+		static volatile uint32_t buzzer_lpt;
+		static volatile uint32_t modeButton_lpt;
+		static volatile uint32_t selectButton_lpt;
 
+		static void button_Function(uint gpio, uint32_t events);
 		static void modeFunction(uint32_t current_time, uint32_t events);
 		static void selectFunction(uint32_t current_time, uint32_t events);
-		static void playBuzzer(int frequency, int duration);
-		static void button_Function(uint gpio, uint32_t events);
 
     public:
 		void Initialize(IDATA *IData, ISYSTEM *ISystem);
+		static void playBuzzer(int frequency, int duration);
 		static inline void stopBuzzer();
 };
 
