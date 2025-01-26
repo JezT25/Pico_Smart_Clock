@@ -11,7 +11,7 @@
 
 #define DEBOUNCE_MS			100
 #define BUTTON_MIN_PRESS 	30
-#define BUTTON_LONG_PRESS 	1500
+#define BUTTON_LONG_PRESS 	1250
 
 #define BEEP_SHORT          50
 #define BEEP_MED            100
@@ -33,8 +33,9 @@ class HWIO_class : private HARDWARE_class {
 		static volatile uint32_t selectButton_lpt;
 
 		static void button_Function(uint gpio, uint32_t events);
-		static void modeFunction(uint32_t current_time, uint32_t events);
-		static void selectFunction(uint32_t current_time, uint32_t events);
+		static void modeFunction(uint32_t current_time);
+		static void selectFunction(uint32_t current_time);
+		static void doubleFunction(uint32_t current_time);
 
     public:
 		void Initialize(IDATA *IData, ISYSTEM *ISystem);

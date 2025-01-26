@@ -10,6 +10,7 @@
 /** Standard Pico Libraries **/
 #include <stdio.h>
 #include <cstring>
+#include <math.h>
 #include "pico/stdlib.h"
 #include "hardware/i2c.h"
 #include "hardware/timer.h"

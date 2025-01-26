@@ -24,76 +24,6 @@ void HWIO_class::Initialize(IDATA *IData, ISYSTEM *ISystem)
 	gpio_set_irq_enabled_with_callback(BUTTON_SELECT, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, true, &button_Function);
 }
 
-void HWIO_class::button_Function(uint gpio, uint32_t events)
-{
-	uint32_t current_time = to_ms_since_boot(get_absolute_time());
-	switch (gpio)
-	{
-		case BUTTON_MODE:
-			modeFunction(current_time, events);
-			break;
-		case BUTTON_SELECT:
-			selectFunction(current_time, events);
-			break;
-	}
-}
-
-void HWIO_class::modeFunction(uint32_t current_time, uint32_t events)
-{
-	if (events & GPIO_IRQ_EDGE_FALL && !modeButton_ispressed)
-	{
-		if (current_time - modeButton_lpt > DEBOUNCE_MS)
-		{
-			modeButton_lpt = current_time;
-			modeButton_ispressed = true;
-		}
-	}
-	else if (events & GPIO_IRQ_EDGE_RISE && modeButton_ispressed)
-	{
-		float press_duration = (current_time - modeButton_lpt);
-
-		if(press_duration > BUTTON_MIN_PRESS && press_duration < BUTTON_LONG_PRESS)
-		{
-			playBuzzer(TONE_LOW, BEEP_SHORT);
-			_ISystem->SYSTEM_MODE = (_ISystem->SYSTEM_MODE == MODE_COUNT - 1) ? _ISystem->CLOCK_MODE : ++_ISystem->SYSTEM_MODE;
-		}
-		else if(press_duration >= BUTTON_LONG_PRESS)
-		{
-			playBuzzer(TONE_LOW, BEEP_LONG);
-		}
-
-		modeButton_ispressed = false;
-	}
-}
-
-void HWIO_class::selectFunction(uint32_t current_time, uint32_t events)
-{
-	if (events & GPIO_IRQ_EDGE_FALL && !selectButton_ispressed)
-	{
-		if (current_time - selectButton_lpt > DEBOUNCE_MS)
-		{
-			selectButton_lpt = current_time;
-			selectButton_ispressed = true;
-		}
-	}
-	else if (events & GPIO_IRQ_EDGE_RISE && selectButton_ispressed)
-	{
-		float press_duration = (current_time - selectButton_lpt);
-
-		if(press_duration > BUTTON_MIN_PRESS && press_duration < BUTTON_LONG_PRESS)
-		{
-			playBuzzer(TONE_LOW, BEEP_SHORT);
-			_ISystem->SYSTEM_MODE = (_ISystem->SYSTEM_MODE == 0) ? MODE_COUNT - 1 : --_ISystem->SYSTEM_MODE;
-		}
-		else if(press_duration >= BUTTON_LONG_PRESS)
-		{
-			playBuzzer(TONE_LOW, BEEP_LONG);
-		}
-
-		selectButton_ispressed = false;
-	}
-}
-
 void HWIO_class::playBuzzer(int frequency, int duration)
 {
 	buzzer_duration = duration;
@@ -110,4 +40,70 @@ void HWIO_class::playBuzzer(int frequency, int duration)
 inline void HWIO_class::stopBuzzer()
 {
 	if (to_ms_since_boot(get_absolute_time()) - buzzer_lpt > buzzer_duration) pwm_set_enabled(pwm_gpio_to_slice_num(BUZZER), false);
+}
+
+void HWIO_class::button_Function(uint gpio, uint32_t events)
+{
+	uint32_t current_time = to_ms_since_boot(get_absolute_time());
+
+	if (events & GPIO_IRQ_EDGE_FALL && !modeButton_ispressed && !selectButton_ispressed)
+	{
+		if (current_time - (gpio == BUTTON_MODE ? modeButton_lpt : selectButton_lpt) > DEBOUNCE_MS)
+		{
+			(gpio == BUTTON_MODE ? modeButton_lpt : selectButton_lpt) = current_time;
+    		(gpio == BUTTON_MODE ? modeButton_ispressed : selectButton_ispressed) = true;
+		}
+	}
+	else if (events & GPIO_IRQ_EDGE_RISE && (modeButton_ispressed ^ selectButton_ispressed))
+	{
+		if(gpio == BUTTON_MODE) modeFunction(current_time);
+		else if (gpio == BUTTON_SELECT) selectFunction(current_time);
+		playBuzzer(TONE_LOW, BEEP_SHORT);
+	}
+	else if (events & GPIO_IRQ_EDGE_FALL && (modeButton_ispressed ^ selectButton_ispressed))
+	{
+		modeButton_ispressed = true;
+		selectButton_ispressed = true;
+	}
+	else if (events & GPIO_IRQ_EDGE_RISE && modeButton_ispressed && selectButton_ispressed)
+	{
+		doubleFunction(current_time);
+	}
+}
+
+void HWIO_class::modeFunction(uint32_t current_time)
+{
+	float press_duration = (current_time - modeButton_lpt);
+
+	if(press_duration > BUTTON_MIN_PRESS)
+	{
+		_ISystem->SYSTEM_MODE = (_ISystem->SYSTEM_MODE == MODE_COUNT - 1) ? _ISystem->CLOCK_MODE : ++_ISystem->SYSTEM_MODE;
+	}
+
+	modeButton_ispressed = false;
+}
+
+void HWIO_class::selectFunction(uint32_t current_time)
+{
+	float press_duration = (current_time - selectButton_lpt);
+
+	if(press_duration > BUTTON_MIN_PRESS)
+	{
+		_ISystem->SYSTEM_MODE = (_ISystem->SYSTEM_MODE == 0) ? MODE_COUNT - 1 : --_ISystem->SYSTEM_MODE;
+	}
+
+	selectButton_ispressed = false;
+}
+
+void HWIO_class::doubleFunction(uint32_t current_time)
+{
+	float press_duration = current_time - fmax(selectButton_lpt, modeButton_lpt);
+
+	if(press_duration > BUTTON_LONG_PRESS)
+	{
+		playBuzzer(TONE_LOW, BEEP_LONG);
+	}
+
+	modeButton_ispressed = false;
+	selectButton_ispressed = false;
 }
