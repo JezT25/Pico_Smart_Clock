@@ -23,8 +23,6 @@
 
 class HWIO_class : private HARDWARE_class {
     private:
-		static volatile IDATA *_IData;
-		static volatile ISYSTEM *_ISystem;
 		static volatile int buzzer_duration;
 		static volatile bool modeButton_ispressed;
 		static volatile bool selectButton_ispressed;
@@ -33,12 +31,20 @@ class HWIO_class : private HARDWARE_class {
 		static volatile uint32_t selectButton_lpt;
 
 		static void button_Function(uint gpio, uint32_t events);
-		static void modeFunction(uint32_t current_time);
-		static void selectFunction(uint32_t current_time);
-		static void doubleFunction(uint32_t current_time);
 
     public:
-		void Initialize(IDATA *IData, ISYSTEM *ISystem);
+		enum Buttons : uint8_t
+		{
+			NO_FLAG,
+			MODE_BUTTON,
+			SELECT_BUTTON,
+			SHORT_COMBO_BUTTON,
+			COMBO_BUTTON
+		};
+		
+		static volatile uint8_t button_flag;
+
+		void Initialize();
 		static void playBuzzer(int frequency, int duration);
 		static inline void stopBuzzer();
 };

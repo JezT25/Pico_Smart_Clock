@@ -9,10 +9,13 @@
 
 #include "../setup.hpp"
 
-#define SEG_COUNT       4
+#define RIGHT_BLINK     0
+#define LEFT_BLINK      1
 
 #define ON              0
+#define ON_SEGMENT      1
 #define OFF             1
+#define OFF_SEGMENT     0
 #define EN_BLANK        true
 #define DISABLE_BLANK   false
 
@@ -25,7 +28,8 @@ class LED_class : private HARDWARE_class {
             SEG_3,
             SEG_4
         };
-        enum LED_Digit : uint8_t {
+        enum LED_Digit : uint8_t
+        {
             ZERO,           // 0
             ONE,            // 1
             TWO,            // 2
@@ -44,16 +48,23 @@ class LED_class : private HARDWARE_class {
             LED_CHAR_COUNT  // Total count
         };
 
-        volatile bool dotState                                  = ON;
-        volatile uint8_t currentSegment                         = SEG_1;
-        volatile uint8_t segmentBuffer[MODE_COUNT][SEG_COUNT]   =
+        volatile bool dotState          = ON;
+        volatile bool sectionState      = ON_SEGMENT;
+        volatile uint8_t currentSegment = SEG_1;
+        volatile uint8_t segmentBuffer[ALL_MODE_COUNT][LED_PARTITION_COUNT]   =
         {
+            // Normal Modes
             {  ZERO,        ZERO,      ZERO,      ZERO    },  // Clock Time
             {  ZERO,        ZERO,      ZERO,      ZERO    },  // Date
             {  TWO,         ZERO,      ZERO,      ZERO    },  // Year
             {  DIGIT_OFF,   ZERO,      ZERO,      DEGREE  },  // Temperature
             {  ZERO,        ZERO,      ZERO,      H       },  // Humidity
-            {  DIGIT_OFF,   ZERO,      ZERO,      P       }   // Pressure
+            {  DIGIT_OFF,   ZERO,      ZERO,      P       },  // Pressure
+
+            // Special Modes
+            {  ZERO,        ZERO,      ZERO,      ZERO    },  // Clock Adjust
+            {  ZERO,        ZERO,      ZERO,      ZERO    },  // Date Adjust
+            {  TWO,         ZERO,      ZERO,      ZERO    }   // Year Adjust
         };
         const uint8_t LED_digitValues[LED_CHAR_COUNT]           =
         {
@@ -80,8 +91,10 @@ class LED_class : private HARDWARE_class {
         inline uint8_t getHundred(uint8_t number, bool blank = DISABLE_BLANK);
 
     public:
-        void toggleDot();
+        volatile uint8_t currentSection_blink;
+
         void toggleDot(ISYSTEM ISystem);
+        void toggleDot_Cleaner(ISYSTEM ISystem);
         void displayDigits(ISYSTEM ISystem);
         void updateBuffer(IDATA IData, ISYSTEM ISystem);
 };

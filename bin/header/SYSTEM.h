@@ -25,6 +25,7 @@ class SYSTEM_class {
 
         static long long int DisplayISR(alarm_id_t id, void* user_data);
         static long long int ClockISR(alarm_id_t id, void* user_data);
+        void system_modeHandler();
 
     public:
         SYSTEM_class(SystemComponents& class_lib) : _IData(class_lib._IData), _ISystem(class_lib._ISystem), _HARDWARE(class_lib._HARDWARE), _LED(class_lib._LED), _SENSOR(class_lib._SENSOR), _TIME(class_lib._TIME), _HWIO(class_lib._HWIO) {}
