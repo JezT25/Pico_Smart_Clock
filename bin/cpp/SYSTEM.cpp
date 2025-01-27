@@ -23,11 +23,12 @@ void SYSTEM_class::Initialize()
 }
 
 void SYSTEM_class::Run()
-{   
+{
     system_modeHandler();
 
     _LED.updateBuffer(_IData, _ISystem);
     _LED.toggleDot_Cleaner(_ISystem);
+    _HWIO.alarmHandler(_IData, _ISystem);
     _HWIO.stopBuzzer();
 }
 
@@ -51,6 +52,15 @@ long long int SYSTEM_class::ClockISR(alarm_id_t id, void* user_data)
 
 void SYSTEM_class::system_modeHandler()
 {
+    // Turn off alarm with any button
+    if(_HWIO.button_flag != _HWIO.NO_FLAG && _HWIO.alarm_isRinging == ALARM_ON)
+    {
+        _HWIO.alarm_isRinging = ALARM_OFF;
+        _HWIO.alarm_timeout = to_ms_since_boot(get_absolute_time()) + ALARM_TIMEOUT;
+        _HWIO.button_flag = _HWIO.NO_FLAG;
+        return;
+    }
+
     switch(_HWIO.button_flag)
     {
         case _HWIO.MODE_BUTTON:
@@ -68,7 +78,6 @@ void SYSTEM_class::system_modeHandler()
                     break;
                 default:
                     _ISystem.SYSTEM_MODE = (_ISystem.SYSTEM_MODE == 0) ? MODE_COUNT - 1 : --_ISystem.SYSTEM_MODE;
-
             }
             break;
         case _HWIO.SELECT_BUTTON:
@@ -93,14 +102,27 @@ void SYSTEM_class::system_modeHandler()
             {
                 case _ISystem.CLOCK_ADJUST_MODE:
                 case _ISystem.DATE_ADJUST_MODE:
-                    _HWIO.playBuzzer(TONE_LOW, BEEP_LONG);
+                    _HWIO.playBuzzer(TONE_LOW, BEEP_SHORT);
                     _LED.currentSection_blink ^= (RIGHT_BLINK ^ LEFT_BLINK);
+                    break;
+                case _ISystem.ALARM_MODE:
+                    _HWIO.playBuzzer(TONE_LOW, BEEP_SHORT);
+                    _ISystem.ALARM_STATE = !_ISystem.ALARM_STATE;
                     break;
             }
             break;
         case _HWIO.COMBO_BUTTON:
             switch (_ISystem.SYSTEM_MODE)
             {
+                case _ISystem.ALARM_MODE:
+                    _HWIO.playBuzzer(TONE_LOW, BEEP_LONG);
+                    _LED.currentSection_blink = RIGHT_BLINK;
+                    _ISystem.SYSTEM_MODE = _ISystem.ALARM_ADJUST_MODE;
+                    break;
+                case _ISystem.ALARM_ADJUST_MODE:
+                    _HWIO.playBuzzer(TONE_LOW, BEEP_LONG);
+                    _ISystem.SYSTEM_MODE = _ISystem.ALARM_MODE;
+                    break;
                 case _ISystem.CLOCK_MODE:
                     _HWIO.playBuzzer(TONE_LOW, BEEP_LONG);
                     _IData.ADJUST_HOUR = _IData.CLOCK_HOUR;

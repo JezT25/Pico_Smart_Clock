@@ -20,6 +20,22 @@ void HWIO_class::Initialize()
 	gpio_set_irq_enabled_with_callback(BUTTON_SELECT, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, true, &button_Function);
 }
 
+void HWIO_class::alarmHandler(IDATA IData, ISYSTEM ISystem)
+{
+	uint32_t current_time = to_ms_since_boot(get_absolute_time()) + ALARM_TIMEOUT;
+	if(current_time - alarm_timeout < ALARM_TIMEOUT) return;
+
+	if(ISystem.ALARM_STATE == ALARM_ON && IData.ADJUST_ALARM_HOUR == IData.CLOCK_HOUR && IData.ADJUST_ALARM_MINUTE == IData.CLOCK_MINUTE)
+	{
+		if (current_time - alarmbeep_lpt >= (beepCount == 0 ? ALARM_LONG_INTERVAL : ALARM_SHORT_INTERVAL)) {
+			playBuzzer(TONE_HIGH, BEEP_MED);
+			alarmbeep_lpt = current_time;
+			beepCount = beepCount < ALARM_BEEP_PATTERN ? ++beepCount : 0;
+		}
+		alarm_isRinging = ALARM_ON;
+	}
+}
+
 // TODO: The buttons are a bit noisy. Maybe adjust them
 void HWIO_class::button_Function(uint gpio, uint32_t events)
 {
