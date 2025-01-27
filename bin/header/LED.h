@@ -11,6 +11,7 @@
 
 #define RIGHT_BLINK     0
 #define LEFT_BLINK      1
+#define ALL_BLINK       2
 
 #define ON              0
 #define ON_SEGMENT      1

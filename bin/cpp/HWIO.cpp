@@ -20,23 +20,24 @@ void HWIO_class::Initialize()
 	gpio_set_irq_enabled_with_callback(BUTTON_SELECT, GPIO_IRQ_EDGE_FALL | GPIO_IRQ_EDGE_RISE, true, &button_Function);
 }
 
-void HWIO_class::alarmHandler(IDATA IData, ISYSTEM ISystem)
+// TODO: BLINK WHOLE SCREEN WHEN ALARMING
+void HWIO_class::alarmHandler(IDATA IData, ISYSTEM *ISystem)
 {
 	uint32_t current_time = to_ms_since_boot(get_absolute_time()) + ALARM_TIMEOUT;
 	if(current_time - alarm_timeout < ALARM_TIMEOUT) return;
 
-	if(ISystem.ALARM_STATE == ALARM_ON && IData.ADJUST_ALARM_HOUR == IData.CLOCK_HOUR && IData.ADJUST_ALARM_MINUTE == IData.CLOCK_MINUTE)
+	if(ISystem->ALARM_STATE == ALARM_ON && IData.ADJUST_ALARM_HOUR == IData.CLOCK_HOUR && IData.ADJUST_ALARM_MINUTE == IData.CLOCK_MINUTE)
 	{
 		if (current_time - alarmbeep_lpt >= (beepCount == 0 ? ALARM_LONG_INTERVAL : ALARM_SHORT_INTERVAL)) {
 			playBuzzer(TONE_HIGH, BEEP_MED);
 			alarmbeep_lpt = current_time;
 			beepCount = beepCount < ALARM_BEEP_PATTERN ? ++beepCount : 0;
 		}
+		ISystem->SYSTEM_MODE = ISystem->CLOCK_MODE;
 		alarm_isRinging = ALARM_ON;
 	}
 }
 
-// TODO: The buttons are a bit noisy. Maybe adjust them
 void HWIO_class::button_Function(uint gpio, uint32_t events)
 {
 	uint32_t current_time = to_ms_since_boot(get_absolute_time());
@@ -55,7 +56,8 @@ void HWIO_class::button_Function(uint gpio, uint32_t events)
 		if(press_duration > BUTTON_MIN_PRESS)
 		{
 			(gpio == BUTTON_MODE ? modeButton_ispressed : selectButton_ispressed) = false;
-			button_flag = (gpio == BUTTON_MODE ? MODE_BUTTON : SELECT_BUTTON);;
+			(gpio == BUTTON_MODE ? modeButton_lpt : selectButton_lpt) = current_time;
+			button_flag = (gpio == BUTTON_MODE ? MODE_BUTTON : SELECT_BUTTON);
 		}
 	}
 	else if (events & GPIO_IRQ_EDGE_FALL && (modeButton_ispressed ^ selectButton_ispressed))
@@ -66,10 +68,12 @@ void HWIO_class::button_Function(uint gpio, uint32_t events)
 	else if (events & GPIO_IRQ_EDGE_RISE && modeButton_ispressed && selectButton_ispressed)
 	{
 		float press_duration = current_time - fmax(selectButton_lpt, modeButton_lpt);
-		if(press_duration > BUTTON_MIN_PRESS && press_duration < BUTTON_LONG_PRESS) button_flag = SHORT_COMBO_BUTTON;
-		else if(press_duration >= BUTTON_LONG_PRESS) button_flag = COMBO_BUTTON;
-		modeButton_ispressed = false;
-		selectButton_ispressed = false;
+		if (press_duration > BUTTON_MIN_PRESS)
+		{
+			button_flag = (press_duration < BUTTON_LONG_PRESS) ? SHORT_COMBO_BUTTON : COMBO_BUTTON;
+			modeButton_lpt = selectButton_lpt = current_time;
+			modeButton_ispressed = selectButton_ispressed = false;
+		}
 	}
 }
 

@@ -54,7 +54,7 @@ class HWIO_class : private HARDWARE_class {
 		static volatile uint8_t button_flag;
 
 		void Initialize();
-		void alarmHandler(IDATA IData, ISYSTEM ISystem);
+		void alarmHandler(IDATA IData, ISYSTEM *ISystem);
 		static void playBuzzer(int frequency, int duration);
 		static inline void stopBuzzer();
 };
