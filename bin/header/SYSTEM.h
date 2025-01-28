@@ -11,6 +11,7 @@
 
 #define ISR_START_ON_MS     1000
 #define DISPLAY_REFRESH_US  5000
+#define STW_REFRESH_US      10000
 #define TIME_REFRESH_US     500000
 
 class SYSTEM_class {
@@ -25,6 +26,7 @@ class SYSTEM_class {
 
         static long long int DisplayISR(alarm_id_t id, void* user_data);
         static long long int ClockISR(alarm_id_t id, void* user_data);
+        static long long int StopwatchISR(alarm_id_t id, void* user_data);
         void system_modeHandler();
 
     public:

@@ -50,7 +50,7 @@ class HWIO_class : private HARDWARE_class {
 		};
 
 		bool alarm_isRinging    = ALARM_OFF;
-        uint32_t alarm_timeout  = 0;
+        uint32_t alarm_timeout  = ALARM_TIMEOUT;
 		static volatile uint8_t button_flag;
 
 		void Initialize();

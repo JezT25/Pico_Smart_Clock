@@ -62,4 +62,3 @@ void HARDWARE_class::Initialize()
     BUTTON_Initialize();
     BUZZER_Initialize();
 }
-

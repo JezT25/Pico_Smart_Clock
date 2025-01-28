@@ -41,6 +41,9 @@
 #define CLOCK_WRITE_SIZE    1
 #define CLOCK_DATA_SIZE     10
 
+#define RUNNING             true
+#define NOT_RUNNING         false
+
 class TIME_class {
     private:
         volatile uint8_t alarm_state;
@@ -58,6 +61,9 @@ class TIME_class {
         inline uint8_t decimal_to_bcd(uint8_t decimal);
 
     public:
+        volatile bool stopwatch_isRunning = false;
+
+        void stopwatch(IDATA *IData);
         void getTime(ISYSTEM *ISystem, IDATA *IData);
         void turnAlarm(ISYSTEM *ISystem);
         void setTime(IDATA *IData);

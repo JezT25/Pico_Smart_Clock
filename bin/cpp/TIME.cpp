@@ -16,6 +16,33 @@ inline uint8_t TIME_class::decimal_to_bcd(uint8_t decimal)
     return ((decimal / 10) << 4) | (decimal % 10);
 }
 
+void TIME_class::stopwatch(IDATA *IData)
+{
+    if (stopwatch_isRunning == RUNNING)
+    {
+        if (IData->STOPWATCH_MS >= 99)
+        {
+            IData->STOPWATCH_MS = 0;
+            IData->STOPWATCH_MINUTE++;
+        }
+        else
+        {
+            IData->STOPWATCH_MS++;
+        }
+
+        if (IData->STOPWATCH_SECOND > 59)
+        {
+            IData->STOPWATCH_SECOND = 0;
+            IData->STOPWATCH_MINUTE++;
+        }
+        if (IData->STOPWATCH_MINUTE > 59)
+        {
+            IData->STOPWATCH_MINUTE = 0;
+            IData->STOPWATCH_HOUR++;
+        }
+    }
+}
+
 void TIME_class::getTime(ISYSTEM *ISystem, IDATA *IData)
 {
     uint8_t ds3231_data[CLOCK_DATA_SIZE];
@@ -92,8 +119,8 @@ void TIME_class::setAlarm(IDATA *IData)
     uint8_t alarm_data[SET_ALARM_SIZE] =
     {
         ALARM_REG,
-        decimal_to_bcd(IData->ADJUST_ALARM_MINUTE),   // Minutes
-        decimal_to_bcd(IData->ADJUST_ALARM_HOUR),     // Hours
+        decimal_to_bcd(IData->ADJUST_ALARM_MINUTE),  // Minutes
+        decimal_to_bcd(IData->ADJUST_ALARM_HOUR),    // Hours
     };
 
     IData->ALARM_HOUR = IData->ADJUST_ALARM_HOUR;

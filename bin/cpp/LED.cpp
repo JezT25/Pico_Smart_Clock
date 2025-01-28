@@ -6,10 +6,16 @@
 
 #include "../setup.hpp"
 
-void LED_class::toggleDot(ISYSTEM ISystem)
+void LED_class::toggleDot(ISYSTEM ISystem, bool stopwatch)
 {
     switch(ISystem.SYSTEM_MODE)
     {   
+        case ISystem.STOPWATCH_MODE:
+            dotState = stopwatch == RUNNING ? !dotState : ON;
+            break;
+        case ISystem.SPLIT_MODE:
+            sectionState = stopwatch == RUNNING ? !sectionState : ON_SEGMENT;
+            break;
         case ISystem.CLOCK_MODE:
             dotState = alarmState == ALARM_OFF ? !dotState : ON;
             if (alarmState == ALARM_OFF) break;
@@ -22,13 +28,17 @@ void LED_class::toggleDot(ISYSTEM ISystem)
     }
 }
 
-void LED_class::LED_Cleaner(ISYSTEM ISystem, bool alarm)
+void LED_class::LED_Cleaner(ISYSTEM ISystem, bool alarm, bool stopwatch)
 {
+    // Dot Cleaner
     switch(ISystem.SYSTEM_MODE)
     {   
+        case ISystem.STOPWATCH_MODE:
+            if (stopwatch == NOT_RUNNING) { dotState = ON; break; }
         case ISystem.CLOCK_MODE:
             alarmState = alarm;
             break;
+        case ISystem.STOPWATCH_MENU_MODE:
         case ISystem.ALARM_MODE:
         case ISystem.YEAR_MODE:
         case ISystem.YEAR_ADJUST_MODE:
@@ -38,20 +48,28 @@ void LED_class::LED_Cleaner(ISYSTEM ISystem, bool alarm)
         default:
             dotState = ON;
     }
+
+    // Section Blink Cleaner
     switch(ISystem.SYSTEM_MODE)
     {   
+        case ISystem.CLOCK_MODE:
+            if (alarmState == ALARM_ON) break;
+        case ISystem.SPLIT_MODE:
+            if (stopwatch == NOT_RUNNING) { sectionState = ON_SEGMENT; break; }
         case ISystem.ALARM_ADJUST_MODE:
         case ISystem.CLOCK_ADJUST_MODE:
         case ISystem.DATE_ADJUST_MODE:
         case ISystem.YEAR_ADJUST_MODE:
             break;
-        case ISystem.CLOCK_MODE:
-            if (alarmState == ALARM_ON) break;
         default:
             sectionState = ON_SEGMENT;
     }
+
+    // Segment Blink Cleaner
     switch(ISystem.SYSTEM_MODE)
     {   
+        case ISystem.SPLIT_MODE:
+            if (stopwatch == NOT_RUNNING) { currentSection_blink = NO_BLINK; break; }
         case ISystem.CLOCK_MODE:
         case ISystem.ALARM_ADJUST_MODE:
         case ISystem.CLOCK_ADJUST_MODE:
@@ -163,6 +181,18 @@ void LED_class::updateBuffer(IDATA IData, ISYSTEM ISystem)
         case (ISystem.YEAR_ADJUST_MODE):
             segmentBuffer[ISystem.YEAR_ADJUST_MODE][SEG_3] = getTens(IData.ADJUST_YEAR);
             segmentBuffer[ISystem.YEAR_ADJUST_MODE][SEG_4] = getOnes(IData.ADJUST_YEAR);
+            break;
+        case (ISystem.STOPWATCH_MODE):
+            segmentBuffer[ISystem.STOPWATCH_MODE][SEG_1] = getTens(IData.STOPWATCH_HOUR > 0 ? IData.STOPWATCH_HOUR : (IData.STOPWATCH_MINUTE > 0 ? IData.STOPWATCH_MINUTE : IData.STOPWATCH_SECOND), EN_BLANK);
+            segmentBuffer[ISystem.STOPWATCH_MODE][SEG_2] = getOnes(IData.STOPWATCH_HOUR > 0 ? IData.STOPWATCH_HOUR : (IData.STOPWATCH_MINUTE > 0 ? IData.STOPWATCH_MINUTE : IData.STOPWATCH_SECOND));
+            segmentBuffer[ISystem.STOPWATCH_MODE][SEG_3] = getTens(IData.STOPWATCH_HOUR > 0 ? IData.STOPWATCH_MINUTE : (IData.STOPWATCH_SECOND > 0 ? IData.STOPWATCH_SECOND : IData.STOPWATCH_MS));
+            segmentBuffer[ISystem.STOPWATCH_MODE][SEG_4] = getOnes(IData.STOPWATCH_HOUR > 0 ? IData.STOPWATCH_MINUTE : (IData.STOPWATCH_SECOND > 0 ? IData.STOPWATCH_SECOND : IData.STOPWATCH_MS));
+            break;
+        case (ISystem.SPLIT_MODE):
+            segmentBuffer[ISystem.SPLIT_MODE][SEG_1] = getTens(IData.SPLIT_HOUR > 0 ? IData.SPLIT_HOUR : (IData.SPLIT_MINUTE > 0 ? IData.SPLIT_MINUTE : IData.SPLIT_SECOND), EN_BLANK);
+            segmentBuffer[ISystem.SPLIT_MODE][SEG_2] = getOnes(IData.SPLIT_HOUR > 0 ? IData.SPLIT_HOUR : (IData.SPLIT_MINUTE > 0 ? IData.SPLIT_MINUTE : IData.SPLIT_SECOND));
+            segmentBuffer[ISystem.SPLIT_MODE][SEG_3] = getTens(IData.SPLIT_HOUR > 0 ? IData.SPLIT_MINUTE : (IData.SPLIT_SECOND > 0 ? IData.SPLIT_SECOND : IData.SPLIT_MS));
+            segmentBuffer[ISystem.SPLIT_MODE][SEG_4] = getOnes(IData.SPLIT_HOUR > 0 ? IData.SPLIT_MINUTE : (IData.SPLIT_SECOND > 0 ? IData.SPLIT_SECOND : IData.SPLIT_MS));
             break;
     }  
 }

@@ -44,8 +44,10 @@ class LED_class : private HARDWARE_class {
             F,              // 14
             H,              // 15
             P,              // 16
-            n,              // 17
-            o,              // 18
+            S,              // 17
+            n,              // 18
+            o,              // 19
+            t,              // 20
             LED_CHAR_COUNT  // Total count
         };
 
@@ -72,8 +74,10 @@ class LED_class : private HARDWARE_class {
             0b0001110, // F
             0b0001001, // H
             0b0001100, // P
+            0b0010010, // S
             0b0101011, // n
-            0b0100011  // o
+            0b0100011, // o
+            0b0000111  // t
         };
         volatile uint8_t segmentBuffer[ALL_MODE_COUNT][LED_PARTITION_COUNT] =
         {
@@ -85,8 +89,11 @@ class LED_class : private HARDWARE_class {
             {  DIGIT_OFF,   ZERO,      ZERO,      DEGREE  },  // Temperature
             {  ZERO,        ZERO,      ZERO,      H       },  // Humidity
             {  DIGIT_OFF,   ZERO,      ZERO,      P       },  // Pressure
+            {  S,           t,         o,         P       },  // Stopwatch Menu
 
             // Special Modes
+            {  ZERO,        ZERO,      ZERO,      ZERO    },  // Stopwatch
+            {  ZERO,        ZERO,      ZERO,      ZERO    },  // Split
             {  ZERO,        ZERO,      ZERO,      ZERO    },  // Alarm Adjust
             {  ZERO,        ZERO,      ZERO,      ZERO    },  // Clock Adjust
             {  ZERO,        ZERO,      ZERO,      ZERO    },  // Date Adjust
@@ -108,8 +115,8 @@ class LED_class : private HARDWARE_class {
     
         volatile uint8_t currentSection_blink = NO_BLINK;
 
-        void toggleDot(ISYSTEM ISystem);
-        void LED_Cleaner(ISYSTEM ISystem, bool alarm);
+        void toggleDot(ISYSTEM ISystem, bool stopwatch);
+        void LED_Cleaner(ISYSTEM ISystem, bool alarm, bool stopwatch);
         void displayDigits(ISYSTEM ISystem);
         void updateBuffer(IDATA IData, ISYSTEM ISystem);
 };
