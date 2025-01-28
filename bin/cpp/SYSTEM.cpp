@@ -27,7 +27,7 @@ void SYSTEM_class::Run()
     system_modeHandler();
 
     _LED.updateBuffer(_IData, _ISystem);
-    _LED.toggleDot_Cleaner(_ISystem);
+    _LED.LED_Cleaner(_ISystem, _HWIO.alarm_isRinging);
     _HWIO.alarmHandler(_IData, &_ISystem);
     _HWIO.stopBuzzer();
 }
@@ -68,13 +68,13 @@ void SYSTEM_class::system_modeHandler()
             switch (_ISystem.SYSTEM_MODE)
             {
                 case _ISystem.ALARM_ADJUST_MODE:
-                    _LED.currentSection_blink == LEFT_BLINK ? (_IData.ADJUST_ALARM_HOUR = _IData.ADJUST_ALARM_HOUR == 0 ? 23 : --_IData.ADJUST_ALARM_HOUR) : (_IData.ADJUST_ALARM_MINUTE = _IData.ADJUST_ALARM_MINUTE == 0 ? 59 : --_IData.ADJUST_ALARM_MINUTE);
+                    _LED.currentSection_blink == _LED.LEFT_BLINK ? (_IData.ADJUST_ALARM_HOUR = _IData.ADJUST_ALARM_HOUR == 0 ? 23 : --_IData.ADJUST_ALARM_HOUR) : (_IData.ADJUST_ALARM_MINUTE = _IData.ADJUST_ALARM_MINUTE == 0 ? 59 : --_IData.ADJUST_ALARM_MINUTE);
                     break;
                 case _ISystem.CLOCK_ADJUST_MODE:
-                    _LED.currentSection_blink == LEFT_BLINK ? (_IData.ADJUST_HOUR = _IData.ADJUST_HOUR == 0 ? 23 : --_IData.ADJUST_HOUR) : (_IData.ADJUST_MINUTE = _IData.ADJUST_MINUTE == 0 ? 59 : --_IData.ADJUST_MINUTE);
+                    _LED.currentSection_blink == _LED.LEFT_BLINK ? (_IData.ADJUST_HOUR = _IData.ADJUST_HOUR == 0 ? 23 : --_IData.ADJUST_HOUR) : (_IData.ADJUST_MINUTE = _IData.ADJUST_MINUTE == 0 ? 59 : --_IData.ADJUST_MINUTE);
                     break;
                 case _ISystem.DATE_ADJUST_MODE:
-                    _LED.currentSection_blink == LEFT_BLINK ? (_IData.ADJUST_DAY = _IData.ADJUST_DAY == 1 ? 31 : --_IData.ADJUST_DAY) : (_IData.ADJUST_MONTH = _IData.ADJUST_MONTH == 1 ? 12 : --_IData.ADJUST_MONTH);
+                    _LED.currentSection_blink == _LED.LEFT_BLINK ? (_IData.ADJUST_DAY = _IData.ADJUST_DAY == 1 ? 31 : --_IData.ADJUST_DAY) : (_IData.ADJUST_MONTH = _IData.ADJUST_MONTH == 1 ? 12 : --_IData.ADJUST_MONTH);
                     break;
                 case _ISystem.YEAR_ADJUST_MODE:
                     _IData.ADJUST_YEAR = _IData.ADJUST_YEAR == 0 ? 99 : --_IData.ADJUST_YEAR;
@@ -88,13 +88,13 @@ void SYSTEM_class::system_modeHandler()
             switch (_ISystem.SYSTEM_MODE)
             {
                 case _ISystem.ALARM_ADJUST_MODE:
-                    _LED.currentSection_blink == LEFT_BLINK ? (_IData.ADJUST_ALARM_HOUR = _IData.ADJUST_ALARM_HOUR == 23 ? 0 : ++_IData.ADJUST_ALARM_HOUR) : (_IData.ADJUST_ALARM_MINUTE = _IData.ADJUST_ALARM_MINUTE == 59 ? 0 : ++_IData.ADJUST_ALARM_MINUTE);
+                    _LED.currentSection_blink == _LED.LEFT_BLINK ? (_IData.ADJUST_ALARM_HOUR = _IData.ADJUST_ALARM_HOUR == 23 ? 0 : ++_IData.ADJUST_ALARM_HOUR) : (_IData.ADJUST_ALARM_MINUTE = _IData.ADJUST_ALARM_MINUTE == 59 ? 0 : ++_IData.ADJUST_ALARM_MINUTE);
                     break;
                 case _ISystem.CLOCK_ADJUST_MODE:
-                    _LED.currentSection_blink == LEFT_BLINK ? (_IData.ADJUST_HOUR = _IData.ADJUST_HOUR == 23 ? 0 : ++_IData.ADJUST_HOUR) : (_IData.ADJUST_MINUTE = _IData.ADJUST_MINUTE == 59 ? 0 : ++_IData.ADJUST_MINUTE);
+                    _LED.currentSection_blink == _LED.LEFT_BLINK ? (_IData.ADJUST_HOUR = _IData.ADJUST_HOUR == 23 ? 0 : ++_IData.ADJUST_HOUR) : (_IData.ADJUST_MINUTE = _IData.ADJUST_MINUTE == 59 ? 0 : ++_IData.ADJUST_MINUTE);
                     break;
                 case _ISystem.DATE_ADJUST_MODE:
-                    _LED.currentSection_blink == LEFT_BLINK ? (_IData.ADJUST_DAY = _IData.ADJUST_DAY == 31 ? 1 : ++_IData.ADJUST_DAY) : (_IData.ADJUST_MONTH = _IData.ADJUST_MONTH == 12 ? 1 : ++_IData.ADJUST_MONTH);
+                    _LED.currentSection_blink == _LED.LEFT_BLINK ? (_IData.ADJUST_DAY = _IData.ADJUST_DAY == 31 ? 1 : ++_IData.ADJUST_DAY) : (_IData.ADJUST_MONTH = _IData.ADJUST_MONTH == 12 ? 1 : ++_IData.ADJUST_MONTH);
                     break;
                 case _ISystem.YEAR_ADJUST_MODE:
                     _IData.ADJUST_YEAR = _IData.ADJUST_YEAR == 99 ? 0 : ++_IData.ADJUST_YEAR;
@@ -110,7 +110,7 @@ void SYSTEM_class::system_modeHandler()
                 case _ISystem.CLOCK_ADJUST_MODE:
                 case _ISystem.DATE_ADJUST_MODE:
                     _HWIO.playBuzzer(TONE_LOW, BEEP_SHORT);
-                    _LED.currentSection_blink ^= (RIGHT_BLINK ^ LEFT_BLINK);
+                    _LED.currentSection_blink ^= (_LED.RIGHT_BLINK ^ _LED.LEFT_BLINK);
                     break;
                 case _ISystem.ALARM_MODE:
                     _HWIO.playBuzzer(TONE_LOW, BEEP_SHORT);
@@ -125,7 +125,7 @@ void SYSTEM_class::system_modeHandler()
                     _HWIO.playBuzzer(TONE_LOW, BEEP_LONG);
                     _IData.ADJUST_ALARM_HOUR = _IData.ALARM_HOUR;
                     _IData.ADJUST_ALARM_MINUTE = _IData.ALARM_MINUTE;
-                    _LED.currentSection_blink = RIGHT_BLINK;
+                    _LED.currentSection_blink = _LED.RIGHT_BLINK;
                     _ISystem.SYSTEM_MODE = _ISystem.ALARM_ADJUST_MODE;
                     break;
                 case _ISystem.ALARM_ADJUST_MODE:
@@ -137,7 +137,7 @@ void SYSTEM_class::system_modeHandler()
                     _HWIO.playBuzzer(TONE_LOW, BEEP_LONG);
                     _IData.ADJUST_HOUR = _IData.CLOCK_HOUR;
                     _IData.ADJUST_MINUTE = _IData.CLOCK_MINUTE;
-                    _LED.currentSection_blink = RIGHT_BLINK;
+                    _LED.currentSection_blink = _LED.RIGHT_BLINK;
                     _ISystem.SYSTEM_MODE = _ISystem.CLOCK_ADJUST_MODE;
                     break;
                 case _ISystem.CLOCK_ADJUST_MODE:
@@ -149,7 +149,7 @@ void SYSTEM_class::system_modeHandler()
                     _HWIO.playBuzzer(TONE_LOW, BEEP_LONG);
                     _IData.ADJUST_DAY = _IData.CLOCK_DAY;
                     _IData.ADJUST_MONTH = _IData.CLOCK_MONTH;
-                    _LED.currentSection_blink = RIGHT_BLINK;
+                    _LED.currentSection_blink = _LED.RIGHT_BLINK;
                     _ISystem.SYSTEM_MODE = _ISystem.DATE_ADJUST_MODE;
                     break;
                 case _ISystem.DATE_ADJUST_MODE:
@@ -160,7 +160,7 @@ void SYSTEM_class::system_modeHandler()
                 case _ISystem.YEAR_MODE:
                     _HWIO.playBuzzer(TONE_LOW, BEEP_LONG);
                     _IData.ADJUST_YEAR = _IData.CLOCK_YEAR;
-                    _LED.currentSection_blink = RIGHT_BLINK;
+                    _LED.currentSection_blink = _LED.RIGHT_BLINK;
                     _ISystem.SYSTEM_MODE = _ISystem.YEAR_ADJUST_MODE;
                     break;
                 case _ISystem.YEAR_ADJUST_MODE:

@@ -46,7 +46,8 @@ void TIME_class::getTime(ISYSTEM *ISystem, IDATA *IData)
 
 void TIME_class::setTime(IDATA *IData)
 {
-    uint8_t time_data[SET_TIME_SIZE] = {
+    uint8_t time_data[SET_TIME_SIZE] =
+    {
         SECOND_REG,
         decimal_to_bcd(IData->ADJUST_MINUTE),   // Minutes
         decimal_to_bcd(IData->ADJUST_HOUR),     // Hours
@@ -60,7 +61,8 @@ void TIME_class::setTime(IDATA *IData)
 
 void TIME_class::setDate(IDATA *IData)
 {
-    uint8_t date_data[SET_DATE_SIZE] = {
+    uint8_t date_data[SET_DATE_SIZE] =
+    {
         DATE_REG,
         decimal_to_bcd(IData->ADJUST_DAY),      // Date
         decimal_to_bcd(IData->ADJUST_MONTH),    // Month
@@ -74,7 +76,8 @@ void TIME_class::setDate(IDATA *IData)
 
 void TIME_class::setYear(IDATA *IData)
 {
-    uint8_t year_data[SET_YEAR_SIZE] = {
+    uint8_t year_data[SET_YEAR_SIZE] =
+    {
         YEAR_REG,
         decimal_to_bcd(IData->ADJUST_YEAR),    // Year
     };
@@ -86,7 +89,8 @@ void TIME_class::setYear(IDATA *IData)
 
 void TIME_class::setAlarm(IDATA *IData)
 {
-    uint8_t alarm_data[SET_ALARM_SIZE] = {
+    uint8_t alarm_data[SET_ALARM_SIZE] =
+    {
         ALARM_REG,
         decimal_to_bcd(IData->ADJUST_ALARM_MINUTE),   // Minutes
         decimal_to_bcd(IData->ADJUST_ALARM_HOUR),     // Hours
@@ -102,7 +106,8 @@ void TIME_class::turnAlarm(ISYSTEM *ISystem)
 {
     ISystem->ALARM_STATE = !ISystem->ALARM_STATE;
 
-    uint8_t alarm_data[TURN_ALARM_SIZE] = {
+    uint8_t alarm_data[TURN_ALARM_SIZE] =
+    {
         ALARM_POWER_REG,                            // Alarm State
         decimal_to_bcd(ISystem->ALARM_STATE)
     };

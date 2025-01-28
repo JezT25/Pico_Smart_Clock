@@ -11,8 +11,8 @@ void LED_class::toggleDot(ISYSTEM ISystem)
     switch(ISystem.SYSTEM_MODE)
     {   
         case ISystem.CLOCK_MODE:
-            dotState = !dotState;
-            break;
+            dotState = alarmState == ALARM_OFF ? !dotState : ON;
+            if (alarmState == ALARM_OFF) break;
         case ISystem.ALARM_ADJUST_MODE:
         case ISystem.CLOCK_ADJUST_MODE:
         case ISystem.DATE_ADJUST_MODE:
@@ -22,11 +22,12 @@ void LED_class::toggleDot(ISYSTEM ISystem)
     }
 }
 
-void LED_class::toggleDot_Cleaner(ISYSTEM ISystem)
+void LED_class::LED_Cleaner(ISYSTEM ISystem, bool alarm)
 {
     switch(ISystem.SYSTEM_MODE)
     {   
         case ISystem.CLOCK_MODE:
+            alarmState = alarm;
             break;
         case ISystem.ALARM_MODE:
         case ISystem.YEAR_MODE:
@@ -44,8 +45,21 @@ void LED_class::toggleDot_Cleaner(ISYSTEM ISystem)
         case ISystem.DATE_ADJUST_MODE:
         case ISystem.YEAR_ADJUST_MODE:
             break;
+        case ISystem.CLOCK_MODE:
+            if (alarmState == ALARM_ON) break;
         default:
             sectionState = ON_SEGMENT;
+    }
+    switch(ISystem.SYSTEM_MODE)
+    {   
+        case ISystem.CLOCK_MODE:
+        case ISystem.ALARM_ADJUST_MODE:
+        case ISystem.CLOCK_ADJUST_MODE:
+        case ISystem.DATE_ADJUST_MODE:
+        case ISystem.YEAR_ADJUST_MODE:
+            break;
+        default:
+            currentSection_blink = NO_BLINK;
     }
 }
 
@@ -61,9 +75,30 @@ void LED_class::displayDigits(ISYSTEM ISystem)
     }
 
     // Partitions
+    bool segmentState;
     for (uint8_t i = 0; i < LED_PARTITION_COUNT; i++)
     {
-        gpio_put(LED_Section[i], sectionState ? (i == currentSegment) : ((currentSection_blink == RIGHT_BLINK && currentSegment < SEG_3 && i == currentSegment) || (currentSection_blink == LEFT_BLINK && currentSegment > SEG_2 && i == currentSegment) ? ON_SEGMENT : OFF_SEGMENT));
+        switch (sectionState)
+        {
+            case ON_SEGMENT:
+                segmentState = (i == currentSegment);
+                break;
+            case OFF_SEGMENT:
+                switch (currentSection_blink)
+                {
+                    case RIGHT_BLINK:
+                        segmentState = (currentSegment < SEG_3 && i == currentSegment) ? ON_SEGMENT : OFF_SEGMENT;
+                        break;
+                    case LEFT_BLINK:
+                        segmentState = (currentSegment > SEG_2 && i == currentSegment) ? ON_SEGMENT : OFF_SEGMENT;
+                        break;
+                    case ALL_BLINK:
+                    default:
+                        segmentState = OFF_SEGMENT;
+                }
+                break;
+        }
+        gpio_put(LED_Section[i], segmentState);
     }
 
     currentSegment = currentSegment == SEG_4 ? SEG_1 : ++currentSegment;

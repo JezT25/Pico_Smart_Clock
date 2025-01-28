@@ -9,10 +9,6 @@
 
 #include "../setup.hpp"
 
-#define RIGHT_BLINK     0
-#define LEFT_BLINK      1
-#define ALL_BLINK       2
-
 #define ON              0
 #define ON_SEGMENT      1
 #define OFF             1
@@ -53,10 +49,11 @@ class LED_class : private HARDWARE_class {
             LED_CHAR_COUNT  // Total count
         };
 
+        volatile bool alarmState        = ALARM_OFF;
         volatile bool dotState          = ON;
         volatile bool sectionState      = ON_SEGMENT;
         volatile uint8_t currentSegment = SEG_1;
-        const uint8_t LED_digitValues[LED_CHAR_COUNT]           =
+        const uint8_t LED_digitValues[LED_CHAR_COUNT] =
         {
             0b1000000, // 0
             0b1111001, // 1
@@ -78,7 +75,7 @@ class LED_class : private HARDWARE_class {
             0b0101011, // n
             0b0100011  // o
         };
-        volatile uint8_t segmentBuffer[ALL_MODE_COUNT][LED_PARTITION_COUNT]   =
+        volatile uint8_t segmentBuffer[ALL_MODE_COUNT][LED_PARTITION_COUNT] =
         {
             // Normal Modes
             {  A,           DASH,      o,         F       },  // Alarm
@@ -102,10 +99,17 @@ class LED_class : private HARDWARE_class {
         inline uint8_t getHundred(uint8_t number, bool blank = DISABLE_BLANK);
 
     public:
-        volatile uint8_t currentSection_blink;
+        enum BLINK : uint8_t{
+            NO_BLINK,
+            RIGHT_BLINK,
+            LEFT_BLINK,
+            ALL_BLINK
+        };
+    
+        volatile uint8_t currentSection_blink = NO_BLINK;
 
         void toggleDot(ISYSTEM ISystem);
-        void toggleDot_Cleaner(ISYSTEM ISystem);
+        void LED_Cleaner(ISYSTEM ISystem, bool alarm);
         void displayDigits(ISYSTEM ISystem);
         void updateBuffer(IDATA IData, ISYSTEM ISystem);
 };
