@@ -16,7 +16,7 @@ inline uint8_t TIME_class::decimal_to_bcd(uint8_t decimal)
     return ((decimal / 10) << 4) | (decimal % 10);
 }
 
-void TIME_class::getTime(IDATA *IData)
+void TIME_class::getTime(ISYSTEM *ISystem, IDATA *IData)
 {
     uint8_t ds3231_data[CLOCK_DATA_SIZE];
 
@@ -30,10 +30,11 @@ void TIME_class::getTime(IDATA *IData)
     day     = bcd_to_decimal(ds3231_data[DAY]);
     month   = bcd_to_decimal(ds3231_data[MONTH] & CENTURY_BIT);     // Mask century bit
     year    = bcd_to_decimal(ds3231_data[YEAR]);
-    alarm_seconds = bcd_to_decimal(ds3231_data[ALARM_SECONDS] & ALARM_MIN_MASK);   // Mask alarm bits
+    alarm_state = bcd_to_decimal(ds3231_data[ALARM_POWER] & ALARM_STATE_MASK);     // Keep only 1st bit
     alarm_minutes = bcd_to_decimal(ds3231_data[ALARM_MINUTES] & ALARM_MIN_MASK);   // Mask alarm bits
     alarm_hours   = bcd_to_decimal(ds3231_data[ALARM_HOURS] & HOUR_24_FORMAT);     // Mask 24-hour format
 
+    ISystem->ALARM_STATE = alarm_state;
     IData->ALARM_MINUTE = alarm_minutes;
     IData->ALARM_HOUR   = alarm_hours;
     IData->CLOCK_MINUTE = minutes;
@@ -95,4 +96,16 @@ void TIME_class::setAlarm(IDATA *IData)
     IData->ALARM_MINUTE = IData->ADJUST_ALARM_MINUTE;
 
     i2c_write_blocking(i2c_default, DS3231_ADDR, alarm_data, SET_ALARM_SIZE, false);
+}
+
+void TIME_class::turnAlarm(ISYSTEM *ISystem)
+{
+    ISystem->ALARM_STATE = !ISystem->ALARM_STATE;
+
+    uint8_t alarm_data[TURN_ALARM_SIZE] = {
+        ALARM_POWER_REG,                            // Alarm State
+        decimal_to_bcd(ISystem->ALARM_STATE)
+    };
+
+    i2c_write_blocking(i2c_default, DS3231_ADDR, alarm_data, TURN_ALARM_SIZE, false);
 }

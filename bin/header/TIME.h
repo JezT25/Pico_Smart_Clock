@@ -18,7 +18,7 @@
 #define DAY                 4
 #define MONTH               5
 #define YEAR                6
-#define ALARM_SECONDS       7
+#define ALARM_POWER         7
 #define ALARM_MINUTES       8
 #define ALARM_HOURS         9
 
@@ -27,20 +27,23 @@
 #define DATE_REG            0x04
 #define YEAR_REG            0x06
 #define ALARM_REG           0x08
+#define ALARM_POWER_REG     0x07
 #define CENTURY_BIT         0x1F
 #define HOUR_24_FORMAT      0x3F
 #define ALARM_MIN_MASK      0x7F
+#define ALARM_STATE_MASK    0x01
 
 #define SET_TIME_SIZE       3
 #define SET_DATE_SIZE       3
 #define SET_YEAR_SIZE       2
 #define SET_ALARM_SIZE      3
+#define TURN_ALARM_SIZE     2
 #define CLOCK_WRITE_SIZE    1
 #define CLOCK_DATA_SIZE     10
 
 class TIME_class {
     private:
-        volatile uint8_t alarm_seconds;
+        volatile uint8_t alarm_state;
         volatile uint8_t alarm_minutes;
         volatile uint8_t alarm_hours;
         volatile uint8_t seconds;
@@ -55,7 +58,8 @@ class TIME_class {
         inline uint8_t decimal_to_bcd(uint8_t decimal);
 
     public:
-        void getTime(IDATA *IData);
+        void getTime(ISYSTEM *ISystem, IDATA *IData);
+        void turnAlarm(ISYSTEM *ISystem);
         void setTime(IDATA *IData);
         void setDate(IDATA *IData);
         void setYear(IDATA *IData);

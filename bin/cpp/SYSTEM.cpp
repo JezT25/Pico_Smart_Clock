@@ -45,7 +45,7 @@ long long int SYSTEM_class::ClockISR(alarm_id_t id, void* user_data)
 {
     SYSTEM_class* system = static_cast<SYSTEM_class*>(user_data);
     system->_LED.toggleDot(system->_ISystem);
-    system->_TIME.getTime(&system->_IData);
+    system->_TIME.getTime(&system->_ISystem, &system->_IData);
     system->_SENSOR.getSensorData(&system->_IData);
     return TIME_REFRESH_US;
 }
@@ -114,7 +114,7 @@ void SYSTEM_class::system_modeHandler()
                     break;
                 case _ISystem.ALARM_MODE:
                     _HWIO.playBuzzer(TONE_LOW, BEEP_SHORT);
-                    _ISystem.ALARM_STATE = !_ISystem.ALARM_STATE;
+                    _TIME.turnAlarm(&_ISystem);
                     break;
             }
             break;
