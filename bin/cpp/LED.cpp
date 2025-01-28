@@ -38,6 +38,7 @@ void LED_class::LED_Cleaner(ISYSTEM ISystem, bool alarm, bool stopwatch)
         case ISystem.CLOCK_MODE:
             alarmState = alarm;
             break;
+        case ISystem.AUTO_VIEW_MODE:
         case ISystem.STOPWATCH_MENU_MODE:
         case ISystem.ALARM_MODE:
         case ISystem.YEAR_MODE:

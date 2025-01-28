@@ -14,6 +14,10 @@
 #define STW_REFRESH_US      10000
 #define TIME_REFRESH_US     500000
 
+#define AUTOVIEW_ON         true
+#define AUTOVIEW_OFF        false
+#define AUTOVIEW_INTERVAL   5000
+
 class SYSTEM_class {
     private:
         IDATA&          _IData;
@@ -24,10 +28,14 @@ class SYSTEM_class {
         TIME_class&     _TIME;
         HWIO_class&     _HWIO;
 
+        bool autoview         = AUTOVIEW_OFF;
+        uint32_t autoview_lpt = 0;
+
+        void system_modeHandler();
+        void system_autoviewHandler();
         static long long int DisplayISR(alarm_id_t id, void* user_data);
         static long long int ClockISR(alarm_id_t id, void* user_data);
         static long long int StopwatchISR(alarm_id_t id, void* user_data);
-        void system_modeHandler();
 
     public:
         SYSTEM_class(SystemComponents& class_lib) : _IData(class_lib._IData), _ISystem(class_lib._ISystem), _HARDWARE(class_lib._HARDWARE), _LED(class_lib._LED), _SENSOR(class_lib._SENSOR), _TIME(class_lib._TIME), _HWIO(class_lib._HWIO) {}

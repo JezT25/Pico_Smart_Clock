@@ -48,6 +48,7 @@ class LED_class : private HARDWARE_class {
             n,              // 18
             o,              // 19
             t,              // 20
+            u,              // 21
             LED_CHAR_COUNT  // Total count
         };
 
@@ -77,7 +78,8 @@ class LED_class : private HARDWARE_class {
             0b0010010, // S
             0b0101011, // n
             0b0100011, // o
-            0b0000111  // t
+            0b0000111, // t
+            0b1100011  // u
         };
         volatile uint8_t segmentBuffer[ALL_MODE_COUNT][LED_PARTITION_COUNT] =
         {
@@ -89,6 +91,7 @@ class LED_class : private HARDWARE_class {
             {  DIGIT_OFF,   ZERO,      ZERO,      DEGREE  },  // Temperature
             {  ZERO,        ZERO,      ZERO,      H       },  // Humidity
             {  DIGIT_OFF,   ZERO,      ZERO,      P       },  // Pressure
+            {  A,           u,         t,         o       },  // Auto View
             {  S,           t,         o,         P       },  // Stopwatch Menu
 
             // Special Modes

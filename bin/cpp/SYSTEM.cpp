@@ -26,6 +26,7 @@ void SYSTEM_class::Initialize()
 void SYSTEM_class::Run()
 {
     system_modeHandler();
+    system_autoviewHandler();
 
     _LED.updateBuffer(_IData, _ISystem);
     _LED.LED_Cleaner(_ISystem, _HWIO.alarm_isRinging, _TIME.stopwatch_isRunning);
@@ -57,6 +58,18 @@ long long int SYSTEM_class::StopwatchISR(alarm_id_t id, void* user_data)
     SYSTEM_class* system = static_cast<SYSTEM_class*>(user_data);
     system->_TIME.stopwatch(&system->_IData);
     return STW_REFRESH_US;
+}
+
+void SYSTEM_class::system_autoviewHandler()
+{
+    if(autoview == AUTOVIEW_OFF) return;
+
+	uint32_t current_time = to_ms_since_boot(get_absolute_time());
+    if(current_time - autoview_lpt >= AUTOVIEW_INTERVAL)
+    {
+        _ISystem.SYSTEM_MODE = (_ISystem.SYSTEM_MODE >= _ISystem.PRES_MODE) ? _ISystem.CLOCK_MODE : ++_ISystem.SYSTEM_MODE;
+        autoview_lpt = current_time;
+    }
 }
 
 void SYSTEM_class::system_modeHandler()
@@ -232,5 +245,20 @@ void SYSTEM_class::system_modeHandler()
             }
             break; 
     }
-    _HWIO.button_flag = _HWIO.NO_FLAG;
+
+    // Auto view handler
+    if(_HWIO.button_flag != _HWIO.NO_FLAG)
+    {
+        if(_ISystem.SYSTEM_MODE == _ISystem.AUTO_VIEW_MODE)
+        {
+            autoview = AUTOVIEW_ON;
+            autoview_lpt = to_ms_since_boot(get_absolute_time());
+        }
+        else
+        {
+            autoview = AUTOVIEW_OFF;
+        }
+    }
+
+    _HWIO.button_flag = _HWIO.NO_FLAG;   
 }

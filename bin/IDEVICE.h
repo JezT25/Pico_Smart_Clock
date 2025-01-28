@@ -7,8 +7,8 @@
 #ifndef IDEVICE_h
 #define IDEVICE_h
 
-#define MODE_COUNT      8
-#define ALL_MODE_COUNT  14
+#define MODE_COUNT      9
+#define ALL_MODE_COUNT  15
 
 #define ALARM_ON        true
 #define ALARM_OFF       false
@@ -69,9 +69,6 @@ class IDATA
         volatile uint8_t ADJUST_YEAR            =   0;
 };
 
-// todo; auto cycle mode must not show alarm states
-// todo, somethimes when we plug in with alarm on it will trigger alarm?
-// todo: polish buttons
 class ISYSTEM
 {
     public:
@@ -88,6 +85,7 @@ class ISYSTEM
             TEMP_MODE,
             HUMI_MODE,
             PRES_MODE,
+            AUTO_VIEW_MODE,
             STOPWATCH_MENU_MODE,
 
             // Special Modes
