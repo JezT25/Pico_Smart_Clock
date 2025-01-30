@@ -9,7 +9,7 @@
 void SYSTEM_class::Initialize()
 {
     // Initialize Pico Hardware
-    _HARDWARE.Initialize();
+    _GPIO.Initialize();
 
     // Initialize BME280 Sensor
     _SENSOR.Initialize();
@@ -42,6 +42,14 @@ long long int SYSTEM_class::DisplayISR(alarm_id_t id, void* user_data)
     return DISPLAY_REFRESH_US;
 }
 
+// Interrupt Routine [100Hz]
+long long int SYSTEM_class::StopwatchISR(alarm_id_t id, void* user_data)
+{
+    SYSTEM_class* system = static_cast<SYSTEM_class*>(user_data);
+    system->_TIME.stopwatch(&system->_IData);
+    return STW_REFRESH_US;
+}
+
 // Interrupt Routine [2Hz]
 long long int SYSTEM_class::ClockISR(alarm_id_t id, void* user_data)
 {
@@ -50,14 +58,6 @@ long long int SYSTEM_class::ClockISR(alarm_id_t id, void* user_data)
     system->_TIME.getTime(&system->_ISystem, &system->_IData);
     system->_SENSOR.getSensorData(&system->_IData);
     return TIME_REFRESH_US;
-}
-
-// Interrupt Routine [1Hz]
-long long int SYSTEM_class::StopwatchISR(alarm_id_t id, void* user_data)
-{
-    SYSTEM_class* system = static_cast<SYSTEM_class*>(user_data);
-    system->_TIME.stopwatch(&system->_IData);
-    return STW_REFRESH_US;
 }
 
 void SYSTEM_class::system_autoviewHandler()

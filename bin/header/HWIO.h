@@ -26,7 +26,7 @@
 #define TONE_LOW            	800
 #define TONE_HIGH           	1000
 
-class HWIO_class : private HARDWARE_class {
+class HWIO_class : private GPIO_class {
     private:
 		uint8_t beepCount 		= 0;
 		uint32_t alarmbeep_lpt	= 0;

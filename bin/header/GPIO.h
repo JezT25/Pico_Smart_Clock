@@ -4,8 +4,8 @@
 	    820 7803
 ************************/
 
-#ifndef HARDWARE_h
-#define HARDWARE_h
+#ifndef GPIO_h
+#define GPIO_h
 
 #include "../setup.hpp"
 
@@ -35,7 +35,7 @@
 #define LED_SEGMENT_COUNT   7
 #define BUTTON_COUNT        2
 
-class HARDWARE_class {
+class GPIO_class {
     protected:
         const uint8_t LED_Dot                           =   SEG_DOT;
         const uint8_t LED_Section[LED_PARTITION_COUNT]  = { SEG_CTRL_1, SEG_CTRL_2, SEG_CTRL_3, SEG_CTRL_4 };

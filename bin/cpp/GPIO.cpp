@@ -6,7 +6,7 @@
 
 #include "../setup.hpp"
 
-void HARDWARE_class::I2C_Initialize()
+void GPIO_class::I2C_Initialize()
 {
     i2c_init(i2c_default, 400 * 1000); 
     gpio_set_function(PICO_DEFAULT_I2C_SDA_PIN, GPIO_FUNC_I2C);
@@ -15,7 +15,7 @@ void HARDWARE_class::I2C_Initialize()
     gpio_pull_up(PICO_DEFAULT_I2C_SCL_PIN);
 }
 
-void HARDWARE_class::LED_Initialize()
+void GPIO_class::LED_Initialize()
 {
     // Setup Dot
     gpio_init(LED_Dot);
@@ -39,7 +39,7 @@ void HARDWARE_class::LED_Initialize()
     }
 }
 
-void HARDWARE_class::BUTTON_Initialize()
+void GPIO_class::BUTTON_Initialize()
 {
     // Setup Buttons
     for (uint8_t i = 0; i < BUTTON_COUNT; i++)
@@ -50,12 +50,12 @@ void HARDWARE_class::BUTTON_Initialize()
     }
 }
 
-void HARDWARE_class::BUZZER_Initialize()
+void GPIO_class::BUZZER_Initialize()
 {
     gpio_set_function(BUZZER, GPIO_FUNC_PWM);
 }
 
-void HARDWARE_class::Initialize()
+void GPIO_class::Initialize()
 {
     I2C_Initialize();
     LED_Initialize();

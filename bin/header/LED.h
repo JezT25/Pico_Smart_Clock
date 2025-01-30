@@ -16,7 +16,7 @@
 #define EN_BLANK        true
 #define DISABLE_BLANK   false
 
-class LED_class : private HARDWARE_class {
+class LED_class : private GPIO_class {
     private:
         enum Segments : uint8_t 
         {

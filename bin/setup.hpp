@@ -20,13 +20,13 @@
 /** Pico Smart Clock Libraries **/
 #include "IDEVICE.h"
 
-#include "header/HARDWARE.h"
+#include "header/GPIO.h"
 #include "header/LED.h"
 #include "header/SENSOR.h"
 #include "header/TIME.h"
 #include "header/HWIO.h"
 
-#include "cpp/HARDWARE.cpp"
+#include "cpp/GPIO.cpp"
 #include "cpp/LED.cpp"
 #include "cpp/SENSOR.cpp"
 #include "cpp/TIME.cpp"
@@ -38,7 +38,7 @@ struct SystemComponents {
     ISYSTEM        _ISystem;
 
     // Hardware Classes
-    HARDWARE_class _HARDWARE;
+    GPIO_class     _GPIO;
     LED_class      _LED;
     SENSOR_class   _SENSOR;
     TIME_class     _TIME;
