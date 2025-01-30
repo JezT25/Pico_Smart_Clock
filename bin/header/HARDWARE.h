@@ -12,24 +12,24 @@
 #define HIGH                1
 #define LOW                 0
 
-#define SEG_A               15
-#define SEG_B               13
-#define SEG_C               9
-#define SEG_D               11
-#define SEG_E               12
+#define SEG_A               13
+#define SEG_B               12
+#define SEG_C               8
+#define SEG_D               10
+#define SEG_E               11
 #define SEG_F               14
-#define SEG_G               8
-#define SEG_DOT             10
+#define SEG_G               15
+#define SEG_DOT             9
 
-#define SEG_CTRL_1          16
-#define SEG_CTRL_2          17
-#define SEG_CTRL_3          18
-#define SEG_CTRL_4          19
+#define SEG_CTRL_1          6
+#define SEG_CTRL_2          7
+#define SEG_CTRL_3          2
+#define SEG_CTRL_4          3
 
-#define BUTTON_MODE         20
-#define BUTTON_SELECT       21
+#define BUTTON_MODE         18
+#define BUTTON_SELECT       17
 
-#define BUZZER              7
+#define BUZZER              16
 
 #define LED_PARTITION_COUNT 4
 #define LED_SEGMENT_COUNT   7
