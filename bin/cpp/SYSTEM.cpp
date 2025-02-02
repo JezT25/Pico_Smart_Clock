@@ -17,6 +17,9 @@ void SYSTEM_class::Initialize()
     // Initialize External Hardware IO
     _HWIO.Initialize();
 
+    // Initialize WiFi
+    _WIFI.Initialize();
+
     // Initialize Clock Interrupts
     add_alarm_in_ms(ISR_START_ON_MS, DisplayISR, this, false);
     add_alarm_in_ms(ISR_START_ON_MS, ClockISR, this, false);
@@ -32,6 +35,7 @@ void SYSTEM_class::Run()
     _LED.LED_Cleaner(_ISystem, _HWIO.alarm_isRinging, _TIME.stopwatch_isRunning);
     _HWIO.alarmHandler(_IData, &_ISystem);
     _HWIO.stopBuzzer();
+    _WIFI.updateCloud(_IData);
 }
 
 // Interrupt Routine [200Hz]

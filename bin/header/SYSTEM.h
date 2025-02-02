@@ -27,6 +27,7 @@ class SYSTEM_class {
         SENSOR_class&   _SENSOR;
         TIME_class&     _TIME;
         HWIO_class&     _HWIO;
+        WIFI_class&     _WIFI;
 
         bool autoview         = AUTOVIEW_OFF;
         uint32_t autoview_lpt = 0;
@@ -38,7 +39,7 @@ class SYSTEM_class {
         static long long int StopwatchISR(alarm_id_t id, void* user_data);
 
     public:
-        SYSTEM_class(SystemComponents& class_lib) : _IData(class_lib._IData), _ISystem(class_lib._ISystem), _GPIO(class_lib._GPIO), _LED(class_lib._LED), _SENSOR(class_lib._SENSOR), _TIME(class_lib._TIME), _HWIO(class_lib._HWIO) {}
+        SYSTEM_class(SystemComponents& class_lib) : _IData(class_lib._IData), _ISystem(class_lib._ISystem), _GPIO(class_lib._GPIO), _LED(class_lib._LED), _SENSOR(class_lib._SENSOR), _TIME(class_lib._TIME), _HWIO(class_lib._HWIO), _WIFI(class_lib._WIFI) {}
 
         void Initialize();
         void Run();

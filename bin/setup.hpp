@@ -7,11 +7,19 @@
 #ifndef setup_hpp_included
 #define setup_hpp_included
 
+// Setting for verbosity
+#define VERBOSE 0
+
 /** Standard Pico Libraries **/
 #include <stdio.h>
 #include <cstring>
 #include <math.h>
 #include "pico/stdlib.h"
+#include "pico/cyw43_arch.h"
+#include "lwip/pbuf.h"
+#include "lwip/tcp.h"
+#include "lwip/dns.h"
+#include "lwip/init.h"
 #include "hardware/i2c.h"
 #include "hardware/timer.h"
 #include "hardware/gpio.h"
@@ -25,12 +33,14 @@
 #include "header/SENSOR.h"
 #include "header/TIME.h"
 #include "header/HWIO.h"
+#include "header/WIFI.h"
 
 #include "cpp/GPIO.cpp"
 #include "cpp/LED.cpp"
 #include "cpp/SENSOR.cpp"
 #include "cpp/TIME.cpp"
 #include "cpp/HWIO.cpp"
+#include "cpp/WIFI.cpp"
 
 struct SystemComponents {
     // Data Handling Classes
@@ -43,6 +53,7 @@ struct SystemComponents {
     SENSOR_class   _SENSOR;
     TIME_class     _TIME;
     HWIO_class     _HWIO;
+    WIFI_class     _WIFI;
 };
 
 /** System Handler Library **/

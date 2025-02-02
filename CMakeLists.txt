@@ -23,7 +23,7 @@ if (EXISTS ${picoVscode})
     include(${picoVscode})
 endif()
 # ====================================================================================
-set(PICO_BOARD pico CACHE STRING "Board type")
+set(PICO_BOARD pico_w CACHE STRING "Board type")
 
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
@@ -46,18 +46,19 @@ pico_enable_stdio_usb(Pico_SmartClock 1)
 
 # Add the standard library to the build
 target_link_libraries(Pico_SmartClock
-        pico_stdlib)
+        pico_stdlib
+)
 
 # Add the standard include files to the build
 target_include_directories(Pico_SmartClock PRIVATE
-  ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}
 )
 
 # Add any user requested libraries
-target_link_libraries(Pico_SmartClock 
+target_link_libraries(Pico_SmartClock
         hardware_i2c
         hardware_pwm
-        )
+        pico_cyw43_arch_lwip_poll
+)
 
 pico_add_extra_outputs(Pico_SmartClock)
-

@@ -22,3 +22,13 @@ int main()
 
     return 0;
 }
+
+
+//TODO: USE MULTICORE !!!!!!!! core 1 rtos core 2 bare metal
+// todo: handle and show if wifi not connected?
+// button polishing
+
+// set time and mode via wifi
+// time interval every minute
+
+//movelwipopts somewhere?
