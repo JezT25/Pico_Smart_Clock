@@ -6,29 +6,29 @@
 
 #include "bin/setup.hpp"
 
+SystemComponents class_lib;
+SYSTEM_class Smart_Clock(class_lib);
+
+void core1_rtos_process();
 int main()
 {
     stdio_init_all();
-
-    SystemComponents class_lib;
-    SYSTEM_class Smart_Clock(class_lib);
-
     Smart_Clock.Initialize();
 
-    while (true)
-    {
-        Smart_Clock.Run();
-    }
+    multicore_launch_core1(core1_rtos_process); // RunBare Metal in core1
+    Smart_Clock.RunRTOS();                      // Run FreeRTOS in core0
 
     return 0;
 }
 
+void core1_rtos_process()
+{
+    while(1) Smart_Clock.Run();
+}
 
-//TODO: USE MULTICORE !!!!!!!! core 1 rtos core 2 bare metal
 // todo: handle and show if wifi not connected?
 // button polishing
-
+//------------------------------------------
 // set time and mode via wifi
-// time interval every minute
-
 //movelwipopts somewhere?
+//move rtosconfig also

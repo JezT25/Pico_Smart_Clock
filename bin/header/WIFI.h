@@ -9,8 +9,13 @@
 
 #include "../setup.hpp"
 
-#define WIFI_SSID       "Vodafone-7zgp"
-#define WIFI_PASS       "yrdCy2x4"
+#if !WIFI_CON
+    #define WIFI_SSID   "Vodafone-7zgp"
+    #define WIFI_PASS   "yrdCy2x4"
+#elif WIFI_CON
+    #define WIFI_SSID   "JezT 15 Pro"
+    #define WIFI_PASS   "lil6ix9ineZ"
+#endif
 #define API_KEY         "7YY865RJIK8NIQJ2"
 #define HTTP_SERVER     "api.thingspeak.com"
 #define HTTP_PORT       80
@@ -21,7 +26,6 @@
 class WIFI_class {
     private:
         ip_addr_t resolved_ip;
-        uint32_t updatewifi_lpt;
         static char payload[PAYLOAD_SIZE];
         static struct tcp_pcb *client_pcb;
         
@@ -31,6 +35,7 @@ class WIFI_class {
         static bool dns_callback(const char *hostname, const ip_addr_t *ipaddr, void *arg);
 
     public:
+        inline void Poll();
         bool Initialize();
         bool updateCloud(IDATA IData);
 };

@@ -25,8 +25,12 @@ endif()
 # ====================================================================================
 set(PICO_BOARD pico_w CACHE STRING "Board type")
 
+SET(ProjectName Pico_SmartClock)
+SET(FREERTOS_KERNEL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin/FreeRTOS-Kernel)
+
 # Pull in Raspberry Pi Pico SDK (must be before project)
 include(pico_sdk_import.cmake)
+include(${FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
 
 project(Pico_SmartClock C CXX ASM)
 
@@ -56,6 +60,7 @@ target_include_directories(Pico_SmartClock PRIVATE
 
 # Add any user requested libraries
 target_link_libraries(Pico_SmartClock
+        FreeRTOS-Kernel-Heap4 
         hardware_i2c
         hardware_pwm
         pico_cyw43_arch_lwip_poll

@@ -7,14 +7,16 @@
 #ifndef setup_hpp_included
 #define setup_hpp_included
 
-// Setting for verbosity
-#define VERBOSE 0
+// Settings
+#define VERBOSE     0
+#define WIFI_EN     0
+#define WIFI_CON    1
 
 /** Standard Pico Libraries **/
-#include <stdio.h>
-#include <cstring>
-#include <math.h>
+#include "FreeRTOS.h"
+#include "task.h"
 #include "pico/stdlib.h"
+#include "pico/multicore.h"
 #include "pico/cyw43_arch.h"
 #include "lwip/pbuf.h"
 #include "lwip/tcp.h"
@@ -24,6 +26,9 @@
 #include "hardware/timer.h"
 #include "hardware/gpio.h"
 #include "hardware/pwm.h"
+#include <stdio.h>
+#include <cstring>
+#include <math.h>
 
 /** Pico Smart Clock Libraries **/
 #include "IDEVICE.h"

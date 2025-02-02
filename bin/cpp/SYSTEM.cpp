@@ -18,12 +18,23 @@ void SYSTEM_class::Initialize()
     _HWIO.Initialize();
 
     // Initialize WiFi
-    _WIFI.Initialize();
+    #if WIFI_EN
+        _WIFI.Initialize();
+    #endif
+}
 
-    // Initialize Clock Interrupts
-    add_alarm_in_ms(ISR_START_ON_MS, DisplayISR, this, false);
-    add_alarm_in_ms(ISR_START_ON_MS, ClockISR, this, false);
-    add_alarm_in_ms(ISR_START_ON_MS, StopwatchISR, this, false);
+void SYSTEM_class::RunRTOS()
+{
+    // Initialize FreeRTOS Tasks
+    xTaskCreate(DisplayTask, "DisplayTask", 1024, this, 2, NULL);
+    xTaskCreate(StopwatchTask, "StopwatchTask", 1024, this, 1, NULL);
+    xTaskCreate(ClockTask, "ClockTask", 1024, this, 1, NULL);
+    #if WIFI_EN
+        xTaskCreate(CloudTask, "CloudTask", 1024, this, 1, NULL);
+    #endif
+
+    // Start FreeRTOS Scheduler
+    vTaskStartScheduler();
 }
 
 void SYSTEM_class::Run()
@@ -35,33 +46,63 @@ void SYSTEM_class::Run()
     _LED.LED_Cleaner(_ISystem, _HWIO.alarm_isRinging, _TIME.stopwatch_isRunning);
     _HWIO.alarmHandler(_IData, &_ISystem);
     _HWIO.stopBuzzer();
-    _WIFI.updateCloud(_IData);
+    #if WIFI_EN
+        _WIFI.Poll();
+    #endif
 }
 
-// Interrupt Routine [200Hz]
-long long int SYSTEM_class::DisplayISR(alarm_id_t id, void* user_data)
+// Display Task [200Hz]
+void SYSTEM_class::DisplayTask(void* pvParameters)
 {
-    SYSTEM_class* system = static_cast<SYSTEM_class*>(user_data);
-    system->_LED.displayDigits(system->_ISystem);
-    return DISPLAY_REFRESH_US;
+    SYSTEM_class* system = static_cast<SYSTEM_class*>(pvParameters);
+    TickType_t lastWakeTime = xTaskGetTickCount();
+    
+    while (1)
+    {
+        system->_LED.displayDigits(system->_ISystem);
+        vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(DISPLAY_REFRESH_MS));
+    }
 }
 
-// Interrupt Routine [100Hz]
-long long int SYSTEM_class::StopwatchISR(alarm_id_t id, void* user_data)
+// Stopwatch Task [100Hz]
+void SYSTEM_class::StopwatchTask(void* pvParameters)
 {
-    SYSTEM_class* system = static_cast<SYSTEM_class*>(user_data);
-    system->_TIME.stopwatch(&system->_IData);
-    return STW_REFRESH_US;
+    SYSTEM_class* system = static_cast<SYSTEM_class*>(pvParameters);
+    TickType_t lastWakeTime = xTaskGetTickCount();
+    
+    while (1)
+    {
+        system->_TIME.stopwatch(&system->_IData);
+        vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(STW_REFRESH_MS));
+    }
 }
 
-// Interrupt Routine [2Hz]
-long long int SYSTEM_class::ClockISR(alarm_id_t id, void* user_data)
+// Clock Task [2Hz]
+void SYSTEM_class::ClockTask(void* pvParameters)
 {
-    SYSTEM_class* system = static_cast<SYSTEM_class*>(user_data);
-    system->_LED.toggleDot(system->_ISystem, system->_TIME.stopwatch_isRunning);
-    system->_TIME.getTime(&system->_ISystem, &system->_IData);
-    system->_SENSOR.getSensorData(&system->_IData);
-    return TIME_REFRESH_US;
+    SYSTEM_class* system = static_cast<SYSTEM_class*>(pvParameters);
+    TickType_t lastWakeTime = xTaskGetTickCount();
+    
+    while (1)
+    {
+        system->_LED.toggleDot(system->_ISystem, system->_TIME.stopwatch_isRunning);
+        system->_TIME.getTime(&system->_ISystem, &system->_IData);
+        system->_SENSOR.getSensorData(&system->_IData);
+        vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(TIME_REFRESH_MS));
+    }
+}
+
+// Clock Task [2Hz]
+void SYSTEM_class::CloudTask(void* pvParameters)
+{
+    SYSTEM_class* system = static_cast<SYSTEM_class*>(pvParameters);
+    TickType_t lastWakeTime = xTaskGetTickCount();
+    
+    while (1)
+    {
+        system->_WIFI.updateCloud(system->_IData);
+        vTaskDelayUntil(&lastWakeTime, pdMS_TO_TICKS(CLOUD_REFRESH_MS));
+    }
 }
 
 void SYSTEM_class::system_autoviewHandler()

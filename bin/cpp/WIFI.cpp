@@ -35,21 +35,17 @@ bool WIFI_class::Initialize()
     return 0;
 }
 
+inline void WIFI_class::Poll()
+{
+    cyw43_arch_poll();
+}
+
+
 bool WIFI_class::updateCloud(IDATA IData)
 {
-    int status = 0;
-
-	uint32_t current_time = to_ms_since_boot(get_absolute_time());
-    if(current_time - updatewifi_lpt >= CONNECT_REFRESH)
-    {
-        setPayload(IData);
-        dns_gethostbyname(HTTP_SERVER, &resolved_ip, NULL, NULL);
-        status = dns_callback(HTTP_SERVER, &resolved_ip, NULL);
-        updatewifi_lpt = current_time;
-    }
-    cyw43_arch_poll();
-
-    return status;
+    setPayload(IData);
+    dns_gethostbyname(HTTP_SERVER, &resolved_ip, NULL, NULL);
+    return dns_callback(HTTP_SERVER, &resolved_ip, NULL);
 }
 
 void WIFI_class::setPayload(IDATA IData)
