@@ -7,7 +7,7 @@
 #ifndef TIME_h
 #define TIME_h
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 #define DS3231_ADDR         0x68
 

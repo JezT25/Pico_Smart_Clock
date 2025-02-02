@@ -7,7 +7,7 @@
 #ifndef HWIO_h
 #define HWIO_h
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 #define ALARM_BEEP_PATTERN		3
 #define ALARM_SHORT_INTERVAL	150

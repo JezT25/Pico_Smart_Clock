@@ -4,7 +4,7 @@
 	    820 7803
 ************************/
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 volatile bool HWIO_class::modeButton_ispressed 		= false;
 volatile bool HWIO_class::selectButton_ispressed	= false;

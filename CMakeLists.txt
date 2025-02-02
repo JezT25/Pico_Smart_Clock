@@ -56,6 +56,7 @@ target_link_libraries(Pico_SmartClock
 # Add the standard include files to the build
 target_include_directories(Pico_SmartClock PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}
+        ${CMAKE_CURRENT_LIST_DIR}/bin
 )
 
 # Add any user requested libraries

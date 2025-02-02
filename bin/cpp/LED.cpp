@@ -4,7 +4,7 @@
 	    820 7803
 ************************/
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 void LED_class::toggleDot(ISYSTEM ISystem, bool stopwatch)
 {

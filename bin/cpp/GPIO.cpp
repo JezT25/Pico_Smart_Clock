@@ -4,7 +4,7 @@
 	    820 7803
 ************************/
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 void GPIO_class::I2C_Initialize()
 {

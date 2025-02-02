@@ -4,7 +4,7 @@
 	    820 7803
 ************************/
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 char WIFI_class::payload[PAYLOAD_SIZE] = {};
 struct tcp_pcb *WIFI_class::client_pcb = nullptr;

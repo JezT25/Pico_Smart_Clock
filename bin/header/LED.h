@@ -7,7 +7,7 @@
 #ifndef LED_h
 #define LED_h
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 #define ON              0
 #define ON_SEGMENT      1

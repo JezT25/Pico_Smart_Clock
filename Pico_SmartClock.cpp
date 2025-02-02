@@ -4,7 +4,7 @@
 	    820 7803
 ************************/
 
-#include "bin/setup.hpp"
+#include "setup.hpp"
 
 SystemComponents class_lib;
 SYSTEM_class Smart_Clock(class_lib);
@@ -30,5 +30,3 @@ void core1_rtos_process()
 // button polishing
 //------------------------------------------
 // set time and mode via wifi
-//movelwipopts somewhere?
-//move rtosconfig also

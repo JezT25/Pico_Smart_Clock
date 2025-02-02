@@ -7,7 +7,7 @@
 #ifndef SENSOR_h
 #define SENSOR_h
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 #define ADDR        0x77
 

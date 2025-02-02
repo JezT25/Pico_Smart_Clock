@@ -7,7 +7,7 @@
 #ifndef SYSTEM_h
 #define SYSTEM_h
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 #define ISR_START_ON_MS     1000
 #define DISPLAY_REFRESH_MS  5

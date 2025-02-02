@@ -7,7 +7,7 @@
 #ifndef GPIO_h
 #define GPIO_h
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 #define HIGH                1
 #define LOW                 0

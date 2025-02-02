@@ -4,7 +4,7 @@
 	    820 7803
 ************************/
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 inline uint8_t TIME_class::bcd_to_decimal(uint8_t bcd)
 {

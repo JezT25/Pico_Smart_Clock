@@ -10,7 +10,7 @@
 // Settings
 #define VERBOSE     0
 #define WIFI_EN     0
-#define WIFI_CON    1
+#define WIFI_CON    0
 
 /** Standard Pico Libraries **/
 #include "FreeRTOS.h"

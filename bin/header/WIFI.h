@@ -7,7 +7,7 @@
 #ifndef WIFI_h
 #define WIFI_h
 
-#include "../setup.hpp"
+#include "setup.hpp"
 
 #if !WIFI_CON
     #define WIFI_SSID   "Vodafone-7zgp"
