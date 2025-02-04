@@ -9,7 +9,7 @@
 
 /** System Settings **/
 #define VERBOSE_SENSOR  0
-#define VERBOSE_WIFI    1
+#define VERBOSE_WIFI    0
 
 /** Standard Pico Libraries **/
 #include "FreeRTOS.h"

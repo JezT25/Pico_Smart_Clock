@@ -13,7 +13,7 @@
 #define DISPLAY_REFRESH_MS  5
 #define STW_REFRESH_MS      10
 #define TIME_REFRESH_MS     500
-#define CLOUD_REFRESH_MS    20000
+#define CLOUD_REFRESH_MS    60000
 
 #define AUTOVIEW_ON         true
 #define AUTOVIEW_OFF        false

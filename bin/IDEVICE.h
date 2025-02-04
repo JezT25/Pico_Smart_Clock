@@ -17,56 +17,56 @@ class IDATA
 {
     public:
         // Normal Mode Variables
-        volatile uint8_t ALARM_HOUR             =   0;
+        uint8_t ALARM_HOUR             =   0;
 
-        volatile uint8_t ALARM_MINUTE           =   0;
+        uint8_t ALARM_MINUTE           =   0;
 
-        volatile uint8_t CLOCK_HOUR             =   0;
+        uint8_t CLOCK_HOUR             =   0;
         
-        volatile uint8_t CLOCK_MINUTE           =   0;
+        uint8_t CLOCK_MINUTE           =   0;
         
-        volatile uint8_t CLOCK_DAY              =   0;
+        uint8_t CLOCK_DAY              =   0;
 
-        volatile uint8_t CLOCK_MONTH            =   0;
+        uint8_t CLOCK_MONTH            =   0;
         
-        volatile uint8_t CLOCK_YEAR             =   0;
+        uint8_t CLOCK_YEAR             =   0;
 
-        volatile double SENSOR_TEMP             =   0;
+        double SENSOR_TEMP             =   0;
         
-        volatile double SENSOR_HUMIDITY         =   0;
+        double SENSOR_HUMIDITY         =   0;
 
-        volatile double SENSOR_PRESSURE         =   0;
+        double SENSOR_PRESSURE         =   0;
 
-        volatile uint8_t STOPWATCH_MS           =   0;
+        uint8_t STOPWATCH_MS           =   0;
 
-        volatile uint8_t STOPWATCH_HOUR         =   0;
+        uint8_t STOPWATCH_HOUR         =   0;
 
-        volatile uint8_t STOPWATCH_MINUTE       =   0;
+        uint8_t STOPWATCH_MINUTE       =   0;
 
-        volatile uint8_t STOPWATCH_SECOND       =   0;
+        uint8_t STOPWATCH_SECOND       =   0;
 
-        volatile uint8_t SPLIT_MS               =   0;
+        uint8_t SPLIT_MS               =   0;
 
-        volatile uint8_t SPLIT_HOUR             =   0;
+        uint8_t SPLIT_HOUR             =   0;
 
-        volatile uint8_t SPLIT_MINUTE           =   0;
+        uint8_t SPLIT_MINUTE           =   0;
 
-        volatile uint8_t SPLIT_SECOND           =   0;
+        uint8_t SPLIT_SECOND           =   0;
 
         // Special Mode Variables
-        volatile uint8_t ADJUST_ALARM_HOUR      =   0;
+        uint8_t ADJUST_ALARM_HOUR      =   0;
 
-        volatile uint8_t ADJUST_ALARM_MINUTE    =   0;
+        uint8_t ADJUST_ALARM_MINUTE    =   0;
 
-        volatile uint8_t ADJUST_HOUR            =   0;
+        uint8_t ADJUST_HOUR            =   0;
         
-        volatile uint8_t ADJUST_MINUTE          =   0;
+        uint8_t ADJUST_MINUTE          =   0;
 
-        volatile uint8_t ADJUST_DAY             =   0;
+        uint8_t ADJUST_DAY             =   0;
 
-        volatile uint8_t ADJUST_MONTH           =   0;
+        uint8_t ADJUST_MONTH           =   0;
 
-        volatile uint8_t ADJUST_YEAR            =   0;
+        uint8_t ADJUST_YEAR            =   0;
 };
 
 class ISYSTEM
@@ -97,9 +97,9 @@ class ISYSTEM
             YEAR_ADJUST_MODE
         };
 
-        volatile bool ALARM_STATE       =   ALARM_OFF;
+        bool ALARM_STATE       =   ALARM_OFF;
 
-        volatile uint8_t SYSTEM_MODE    =   CLOCK_MODE; 
+        uint8_t SYSTEM_MODE    =   CLOCK_MODE; 
 };
 
 class SYS_SETTINGS

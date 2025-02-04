@@ -42,9 +42,9 @@ class SENSOR_class {
             int32_t     t_fine; 
         } _bme_comp_coeffs;
 
-        volatile uint32_t raw_temperature;
-        volatile uint32_t raw_pressure;
-        volatile uint32_t raw_humidity;
+        uint32_t raw_temperature;
+        uint32_t raw_pressure;
+        uint32_t raw_humidity;
 
         inline int8_t uint8_t_to_int8_t (uint8_t in);
         inline int16_t uint16_t_to_int16_t(uint16_t in);

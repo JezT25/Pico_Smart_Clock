@@ -46,22 +46,22 @@
 
 class TIME_class {
     private:
-        volatile uint8_t alarm_state;
-        volatile uint8_t alarm_minutes;
-        volatile uint8_t alarm_hours;
-        volatile uint8_t seconds;
-        volatile uint8_t minutes;
-        volatile uint8_t hours;
-        volatile uint8_t dow;
-        volatile uint8_t day;
-        volatile uint8_t month;
-        volatile uint8_t year;
+        uint8_t alarm_state;
+        uint8_t alarm_minutes;
+        uint8_t alarm_hours;
+        uint8_t seconds;
+        uint8_t minutes;
+        uint8_t hours;
+        uint8_t dow;
+        uint8_t day;
+        uint8_t month;
+        uint8_t year;
         
         inline uint8_t bcd_to_decimal(uint8_t bcd);
         inline uint8_t decimal_to_bcd(uint8_t decimal);
 
     public:
-        volatile bool stopwatch_isRunning = false;
+        bool stopwatch_isRunning = false;
 
         void stopwatch(IDATA *IData);
         void getTime(ISYSTEM *ISystem, IDATA *IData);

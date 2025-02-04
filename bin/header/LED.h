@@ -52,10 +52,10 @@ class LED_class : private GPIO_class {
             LED_CHAR_COUNT  // Total count
         };
 
-        volatile bool alarmState        = ALARM_OFF;
-        volatile bool dotState          = ON;
-        volatile bool sectionState      = ON_SEGMENT;
-        volatile uint8_t currentSegment = SEG_1;
+        bool alarmState        = ALARM_OFF;
+        bool dotState          = ON;
+        bool sectionState      = ON_SEGMENT;
+        uint8_t currentSegment = SEG_1;
         const uint8_t LED_digitValues[LED_CHAR_COUNT] =
         {
             0b1000000, // 0
@@ -81,7 +81,7 @@ class LED_class : private GPIO_class {
             0b0000111, // t
             0b1100011  // u
         };
-        volatile uint8_t segmentBuffer[ALL_MODE_COUNT][LED_PARTITION_COUNT] =
+        uint8_t segmentBuffer[ALL_MODE_COUNT][LED_PARTITION_COUNT] =
         {
             // Normal Modes
             {  A,           DASH,      o,         F       },  // Alarm
@@ -116,7 +116,7 @@ class LED_class : private GPIO_class {
             ALL_BLINK
         };
     
-        volatile uint8_t currentSection_blink = NO_BLINK;
+        uint8_t currentSection_blink = NO_BLINK;
 
         void toggleDot(ISYSTEM ISystem, bool stopwatch);
         void LED_Cleaner(ISYSTEM ISystem, bool alarm, bool stopwatch);

@@ -28,6 +28,5 @@ void core1_rtos_process()
 
 // button polishing
 //------------------------------------------
-// remove unecessary volatiles
 // set time and mode via wifi
 // siri integration
