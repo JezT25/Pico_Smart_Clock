@@ -44,6 +44,7 @@
         "string": "cpp",
         "string_view": "cpp",
         "compare": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "cstring": "cpp"
     }
 }

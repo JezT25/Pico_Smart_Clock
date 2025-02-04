@@ -7,10 +7,9 @@
 #ifndef setup_hpp_included
 #define setup_hpp_included
 
-// Settings
-#define VERBOSE     0
-#define WIFI_EN     0
-#define WIFI_CON    0
+/** System Settings **/
+#define VERBOSE_SENSOR  0
+#define VERBOSE_WIFI    1
 
 /** Standard Pico Libraries **/
 #include "FreeRTOS.h"

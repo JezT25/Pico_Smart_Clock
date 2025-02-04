@@ -9,18 +9,15 @@
 
 #include "setup.hpp"
 
-#if !WIFI_CON
-    #define WIFI_SSID   "Vodafone-7zgp"
-    #define WIFI_PASS   "yrdCy2x4"
-#elif WIFI_CON
-    #define WIFI_SSID   "JezT 15 Pro"
-    #define WIFI_PASS   "lil6ix9ineZ"
-#endif
-#define API_KEY         "7YY865RJIK8NIQJ2"
+#define WIFI_SSID0      "Vodafone-7zgp"
+#define WIFI_PASS0      "yrdCy2x4"
+#define WIFI_SSID1      "JezT 15 Pro"
+#define WIFI_PASS1      "lil6ix9ineZ"
+
+#define API_KEY         "DF9P5Y9XLY8AQ73L"
 #define HTTP_SERVER     "api.thingspeak.com"
 #define HTTP_PORT       80
 #define PAYLOAD_SIZE    1024
-#define CONNECT_REFRESH 20000
 #define CONNECT_TIMEOUT 30000
 
 class WIFI_class {
@@ -32,12 +29,12 @@ class WIFI_class {
         void setPayload(IDATA IData);
         static err_t tcp_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err);
         static err_t tcp_connected_callback(void *arg, struct tcp_pcb *tpcb, err_t err);
-        static bool dns_callback(const char *hostname, const ip_addr_t *ipaddr, void *arg);
+        static err_t dns_callback(const char *hostname, const ip_addr_t *ipaddr, void *arg);
 
     public:
-        inline void Poll();
         bool Initialize();
-        bool updateCloud(IDATA IData);
+        inline void Poll();
+        err_t updateCloud(IDATA IData);
 };
 
 #endif

@@ -55,10 +55,17 @@ void GPIO_class::BUZZER_Initialize()
     gpio_set_function(BUZZER, GPIO_FUNC_PWM);
 }
 
+void GPIO_class::PRELOAD_Initialize()
+{
+    _set.SYS_WIFI_EN = gpio_get(BUTTON_MODE);
+    _set.SYS_WIFI_CON = gpio_get(BUTTON_SELECT);
+}
+
 void GPIO_class::Initialize()
 {
     I2C_Initialize();
     LED_Initialize();
     BUTTON_Initialize();
     BUZZER_Initialize();
+    PRELOAD_Initialize();
 }

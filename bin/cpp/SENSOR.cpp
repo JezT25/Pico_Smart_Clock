@@ -62,7 +62,7 @@ void SENSOR_class::getSensorData(IDATA *IData)
     IData->SENSOR_HUMIDITY = compensate_humidity(raw_humidity);
 
     // Uncomment for debugging
-    #if VERBOSE
+    #if VERBOSE_SENSOR
         printf("Pressure    = %.3f kPa\n", IData->SENSOR_PRESSURE);
         printf("Temperature = %.2f C\n", IData->SENSOR_TEMP);
         printf("Humidity    = %.3f %%RH\n\n", IData->SENSOR_HUMIDITY);

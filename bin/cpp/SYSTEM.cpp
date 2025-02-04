@@ -18,9 +18,7 @@ void SYSTEM_class::Initialize()
     _HWIO.Initialize();
 
     // Initialize WiFi
-    #if WIFI_EN
-        _WIFI.Initialize();
-    #endif
+    if(_set.SYS_WIFI_EN) _WIFI.Initialize();
 }
 
 void SYSTEM_class::RunRTOS()
@@ -29,9 +27,7 @@ void SYSTEM_class::RunRTOS()
     xTaskCreate(DisplayTask, "DisplayTask", 1024, this, 2, NULL);
     xTaskCreate(StopwatchTask, "StopwatchTask", 1024, this, 1, NULL);
     xTaskCreate(ClockTask, "ClockTask", 1024, this, 1, NULL);
-    #if WIFI_EN
-        xTaskCreate(CloudTask, "CloudTask", 1024, this, 1, NULL);
-    #endif
+    if(_set.SYS_WIFI_EN) xTaskCreate(CloudTask, "CloudTask", 1024, this, 1, NULL);
 
     // Start FreeRTOS Scheduler
     vTaskStartScheduler();
@@ -39,16 +35,17 @@ void SYSTEM_class::RunRTOS()
 
 void SYSTEM_class::Run()
 {
-    system_modeHandler();
-    system_autoviewHandler();
+    while(1)
+    {
+        system_modeHandler();
+        system_autoviewHandler();
 
-    _LED.updateBuffer(_IData, _ISystem);
-    _LED.LED_Cleaner(_ISystem, _HWIO.alarm_isRinging, _TIME.stopwatch_isRunning);
-    _HWIO.alarmHandler(_IData, &_ISystem);
-    _HWIO.stopBuzzer();
-    #if WIFI_EN
-        _WIFI.Poll();
-    #endif
+        _LED.updateBuffer(_IData, _ISystem);
+        _LED.LED_Cleaner(_ISystem, _HWIO.alarm_isRinging, _TIME.stopwatch_isRunning);
+        _HWIO.alarmHandler(_IData, &_ISystem);
+        _HWIO.stopBuzzer();
+        if(_set.SYS_WIFI_EN) _WIFI.Poll();
+    }
 }
 
 // Display Task [200Hz]
@@ -92,7 +89,7 @@ void SYSTEM_class::ClockTask(void* pvParameters)
     }
 }
 
-// Clock Task [2Hz]
+// Cloud Task
 void SYSTEM_class::CloudTask(void* pvParameters)
 {
     SYSTEM_class* system = static_cast<SYSTEM_class*>(pvParameters);

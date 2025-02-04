@@ -15,18 +15,19 @@ int main()
     stdio_init_all();
     Smart_Clock.Initialize();
 
-    multicore_launch_core1(core1_rtos_process); // RunBare Metal in core1
-    Smart_Clock.RunRTOS();                      // Run FreeRTOS in core0
+    multicore_launch_core1(core1_rtos_process);
+    Smart_Clock.Run();
 
     return 0;
 }
 
 void core1_rtos_process()
 {
-    while(1) Smart_Clock.Run();
+    Smart_Clock.RunRTOS(); 
 }
 
-// todo: handle and show if wifi not connected?
 // button polishing
 //------------------------------------------
+// remove unecessary volatiles
 // set time and mode via wifi
+// siri integration

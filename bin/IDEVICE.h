@@ -102,4 +102,12 @@ class ISYSTEM
         volatile uint8_t SYSTEM_MODE    =   CLOCK_MODE; 
 };
 
+class SYS_SETTINGS
+{
+    public:
+        bool SYS_WIFI_EN;
+        bool SYS_WIFI_CON;
+};
+SYS_SETTINGS _set;
+
 #endif

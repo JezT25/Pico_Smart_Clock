@@ -47,6 +47,7 @@ class GPIO_class {
         void LED_Initialize();
         void BUTTON_Initialize();
         void BUZZER_Initialize();
+        void PRELOAD_Initialize();
 
     public:
         void Initialize();
