@@ -14,7 +14,7 @@
 #define ALARM_LONG_INTERVAL 	800
 #define ALARM_TIMEOUT			60000
 
-#define DEBOUNCE_MS				100
+#define DEBOUNCE_MS				50
 #define BUTTON_MIN_PRESS 		30
 #define BUTTON_LONG_PRESS 		1250
 
@@ -34,6 +34,7 @@ class HWIO_class : private GPIO_class {
 		static volatile bool modeButton_ispressed;
 		static volatile bool selectButton_ispressed;
 		static volatile uint32_t buzzer_lpt;
+		static volatile uint32_t last_press_time;
 		static volatile uint32_t modeButton_lpt;
 		static volatile uint32_t selectButton_lpt;
 

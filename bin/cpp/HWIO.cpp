@@ -10,6 +10,7 @@ volatile bool HWIO_class::modeButton_ispressed 		= false;
 volatile bool HWIO_class::selectButton_ispressed	= false;
 volatile int HWIO_class::buzzer_duration			= BEEP_SHORT;
 volatile uint8_t HWIO_class::button_flag			= NO_FLAG;
+volatile uint32_t HWIO_class::last_press_time		= 0;
 volatile uint32_t HWIO_class::modeButton_lpt		= 0;
 volatile uint32_t HWIO_class::selectButton_lpt		= 0;
 volatile uint32_t HWIO_class::buzzer_lpt 			= 0;
@@ -41,6 +42,7 @@ void HWIO_class::button_Function(uint gpio, uint32_t events)
 {
 	uint32_t current_time = to_ms_since_boot(get_absolute_time());
 
+	if (current_time - last_press_time < DEBOUNCE_MS) return;
 	if (events & GPIO_IRQ_EDGE_FALL && !modeButton_ispressed && !selectButton_ispressed)
 	{
 		if (current_time - (gpio == BUTTON_MODE ? modeButton_lpt : selectButton_lpt) > DEBOUNCE_MS)
@@ -72,6 +74,7 @@ void HWIO_class::button_Function(uint gpio, uint32_t events)
 			button_flag = (press_duration < BUTTON_LONG_PRESS) ? SHORT_COMBO_BUTTON : COMBO_BUTTON;
 			modeButton_lpt = selectButton_lpt = current_time;
 			modeButton_ispressed = selectButton_ispressed = false;
+			last_press_time = current_time;
 		}
 	}
 }

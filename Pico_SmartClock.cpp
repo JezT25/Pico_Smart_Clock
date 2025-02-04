@@ -26,7 +26,6 @@ void core1_rtos_process()
     Smart_Clock.RunRTOS(); 
 }
 
-// button polishing
-//------------------------------------------
 // set time and mode via wifi
 // siri integration
+// Buzzer beeps in autoview when in date
