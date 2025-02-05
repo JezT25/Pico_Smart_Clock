@@ -64,4 +64,6 @@ struct SystemComponents {
 #include "header/SYSTEM.h"
 #include "cpp/SYSTEM.cpp"
 
+void core1_rtos_process();
+
 #endif

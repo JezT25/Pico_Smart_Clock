@@ -9,7 +9,6 @@
 SystemComponents class_lib;
 SYSTEM_class Smart_Clock(class_lib);
 
-void core1_rtos_process();
 int main()
 {
     stdio_init_all();
@@ -25,7 +24,3 @@ void core1_rtos_process()
 {
     Smart_Clock.RunRTOS(); 
 }
-
-// set time and mode via wifi
-// siri integration
-// Buzzer beeps in autoview when in date

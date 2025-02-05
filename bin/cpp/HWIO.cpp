@@ -56,15 +56,19 @@ void HWIO_class::button_Function(uint gpio, uint32_t events)
 		float press_duration = (current_time - (gpio == BUTTON_MODE ? modeButton_lpt : selectButton_lpt));
 		if(press_duration > BUTTON_MIN_PRESS)
 		{
-			(gpio == BUTTON_MODE ? modeButton_ispressed : selectButton_ispressed) = false;
-			(gpio == BUTTON_MODE ? modeButton_lpt : selectButton_lpt) = current_time;
 			button_flag = (gpio == BUTTON_MODE ? MODE_BUTTON : SELECT_BUTTON);
+			last_press_time = modeButton_lpt = selectButton_lpt = current_time;
+			modeButton_ispressed = selectButton_ispressed = false;
 		}
 	}
 	else if (events & GPIO_IRQ_EDGE_FALL && (modeButton_ispressed ^ selectButton_ispressed))
 	{
-		modeButton_ispressed = true;
-		selectButton_ispressed = true;
+		float double_press_duration = (current_time - (gpio == BUTTON_MODE ? selectButton_lpt : modeButton_lpt));
+		if(double_press_duration < DEBOUNCE_MS)
+		{
+			modeButton_ispressed = true;
+			selectButton_ispressed = true;
+		}
 	}
 	else if (events & GPIO_IRQ_EDGE_RISE && modeButton_ispressed && selectButton_ispressed)
 	{
@@ -72,9 +76,8 @@ void HWIO_class::button_Function(uint gpio, uint32_t events)
 		if (press_duration > BUTTON_MIN_PRESS)
 		{
 			button_flag = (press_duration < BUTTON_LONG_PRESS) ? SHORT_COMBO_BUTTON : COMBO_BUTTON;
-			modeButton_lpt = selectButton_lpt = current_time;
+			last_press_time = modeButton_lpt = selectButton_lpt = current_time;
 			modeButton_ispressed = selectButton_ispressed = false;
-			last_press_time = current_time;
 		}
 	}
 }
@@ -93,6 +96,11 @@ void HWIO_class::playBuzzer(int frequency, int duration)
 }
 
 inline void HWIO_class::stopBuzzer()
-{
-	if (to_ms_since_boot(get_absolute_time()) - buzzer_lpt > buzzer_duration) pwm_set_enabled(pwm_gpio_to_slice_num(BUZZER), false);
+{ 
+    if (to_ms_since_boot(get_absolute_time()) - buzzer_lpt > buzzer_duration)
+	{
+		uint slice_num = pwm_gpio_to_slice_num(BUZZER);
+        pwm_set_chan_level(slice_num, pwm_gpio_to_channel(BUZZER), 0);
+        pwm_set_enabled(slice_num, false);
+    }
 }
