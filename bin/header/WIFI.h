@@ -28,6 +28,7 @@ class WIFI_class {
         
         void setPayload(IDATA IData);
         static err_t tcp_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err);
+        static err_t tcp_sent_callback(void *arg, struct tcp_pcb *tpcb, u16_t len);
         static err_t tcp_connected_callback(void *arg, struct tcp_pcb *tpcb, err_t err);
         static err_t dns_callback(const char *hostname, const ip_addr_t *ipaddr, void *arg);
 

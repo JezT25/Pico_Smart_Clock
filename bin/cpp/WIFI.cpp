@@ -68,7 +68,8 @@ void WIFI_class::setPayload(IDATA IData)
     API_KEY, IData.SENSOR_TEMP, IData.SENSOR_HUMIDITY, IData.SENSOR_PRESSURE, HTTP_SERVER);
 }
 
-err_t WIFI_class::tcp_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err) {
+err_t WIFI_class::tcp_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err)
+{
     if (p == NULL) {
         #if VERBOSE_WIFI
             printf("Connection closed by server.\n");
@@ -80,6 +81,13 @@ err_t WIFI_class::tcp_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf
         printf("Received response:\n%.*s\n", p->tot_len, (char *)p->payload);
     #endif
     pbuf_free(p);
+    return ERR_OK;
+}
+
+err_t WIFI_class::tcp_sent_callback(void *arg, struct tcp_pcb *tpcb, u16_t len)
+{
+    tcp_output(tpcb);
+    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, OFF_SEGMENT);
     return ERR_OK;
 }
 
@@ -98,13 +106,17 @@ err_t WIFI_class::tcp_connected_callback(void *arg, struct tcp_pcb *tpcb, err_t 
 
     // Send HTTP GET request
     cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, ON_SEGMENT);
-    tcp_write(tpcb, payload, strlen(payload), TCP_WRITE_FLAG_COPY);
-    sleep_ms(500);
-    tcp_output(tpcb);
 
-    // Set receive callback
+    err_t write_err = tcp_write(tpcb, payload, strlen(payload), TCP_WRITE_FLAG_COPY);
+    if (write_err != ERR_OK) {
+        #if VERBOSE_WIFI
+            printf("TCP write error: %d\n", write_err);
+        #endif
+        return write_err;
+    }
+
+    tcp_sent(tpcb, tcp_sent_callback);
     tcp_recv(tpcb, tcp_recv_callback);
-    cyw43_arch_gpio_put(CYW43_WL_GPIO_LED_PIN, OFF_SEGMENT);
     return ERR_OK;
 }
 
