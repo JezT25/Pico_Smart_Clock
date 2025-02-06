@@ -26,7 +26,7 @@ void HWIO_class::alarmHandler(IDATA IData, ISYSTEM *ISystem)
 	uint32_t current_time = to_ms_since_boot(get_absolute_time()) + ALARM_TIMEOUT;
 	if(current_time - alarm_timeout < ALARM_TIMEOUT) return;
 
-	if(ISystem->SYSTEM_MODE != ISystem->ALARM_ADJUST_MODE && ISystem->ALARM_STATE == ALARM_ON && IData.ADJUST_ALARM_HOUR == IData.CLOCK_HOUR && IData.ADJUST_ALARM_MINUTE == IData.CLOCK_MINUTE)
+	if(ISystem->SYSTEM_MODE != ISystem->ALARM_ADJUST_MODE && ISystem->ALARM_STATE == ALARM_ON && IData.ALARM_HOUR == IData.CLOCK_HOUR && IData.ALARM_MINUTE == IData.CLOCK_MINUTE)
 	{
 		if (current_time - alarmbeep_lpt >= (beepCount == 0 ? ALARM_LONG_INTERVAL : ALARM_SHORT_INTERVAL)) {
 			playBuzzer(TONE_HIGH, BEEP_MED);
