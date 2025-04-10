@@ -1,4 +1,4 @@
-# Pico SmartClock
+<h1 align="center">Pico SmartClock</h1>
 
 A custom-built, real-time smart clock running on the Raspberry Pi Pico W using FreeRTOS, written in C++. Developed by Jezreel Tan.
 
@@ -20,13 +20,14 @@ You can view the real-time data from this smart clock on ThingSpeak:
   - [Build Steps](#build-steps)
 - [🔌 Flashing to Pico](#-flashing-to-pico)
 - [📚 Dependencies](#-dependencies)
+- [🔲 Block Diagram](#-block-diagram)
 - [📐 Schematic Diagram](#-schematic-diagram)
 - [📄 License](#-license)
 - [👤 Author](#-author)
 
 ## 🕒 Overview
 
-The **Pico SmartClock** is a lightweight embedded system designed for accurate real-time clock functionality on the Raspberry Pi Pico W. It is implemented with multithreading using **FreeRTOS** and includes modular support for I2C and PWM peripherals. This project showcases how a clean architecture can drive real-time behavior on a constrained embedded platform.
+<p align="justify">The <b>Pico SmartClock</b> is a lightweight embedded system designed for accurate real-time clock functionality on the Raspberry Pi Pico W. It is implemented with multithreading using **FreeRTOS** and includes modular support for I2C and PWM peripherals. This project showcases how a clean architecture can drive real-time behavior on a constrained embedded platform.</p>
 
 ## 🔧 Features
 
@@ -106,9 +107,12 @@ make
 - FreeRTOS Kernel
 - Pico libraries for hardware_pwm, hardware_i2c, and pico_multicore
 - Optional: pico_cyw43_arch_lwip_poll for WiFi support
+
+## 🔲 Block Diagram
+![Pico SmartClock Schematic](images/blockdiagram.png)
   
 ## 📐 Schematic Diagram
-![Pico SmartClock Schematic](Smart%20Clock.pdf)
+![Pico SmartClock Schematic](images/schematicdiagram.png)
 
 ## 📄 License
 MIT License.
