@@ -20,6 +20,7 @@ You can view the real-time data from this smart clock on ThingSpeak:
   - [Build Steps](#build-steps)
 - [🔌 Flashing to Pico](#-flashing-to-pico)
 - [📚 Dependencies](#-dependencies)
+- [🔲 Block Diagram](#-block-diagram)
 - [📐 Schematic Diagram](#-schematic-diagram)
 - [📄 License](#-license)
 - [👤 Author](#-author)
@@ -106,9 +107,12 @@ make
 - FreeRTOS Kernel
 - Pico libraries for hardware_pwm, hardware_i2c, and pico_multicore
 - Optional: pico_cyw43_arch_lwip_poll for WiFi support
+
+## 🔲 Block Diagram
+![Pico SmartClock Schematic](images/blockdiagram.png)
   
 ## 📐 Schematic Diagram
-![Pico SmartClock Schematic](Smart%20Clock.pdf)
+![Pico SmartClock Schematic](images/schematicdiagram.png)
 
 ## 📄 License
 MIT License.
